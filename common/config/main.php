@@ -9,6 +9,9 @@ return [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+        ],
         'db' => [
             'class' => 'yii\db\Connection',
             'dsn' => 'mysql:host=localhost;dbname=yii2_castom',
