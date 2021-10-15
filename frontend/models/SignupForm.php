@@ -15,7 +15,7 @@ class SignupForm extends Model
     public $username;
     public $email;
     public $password;
-
+    const STATUS_ACTIVE = 10;
 
     /**
      * {@inheritdoc}
@@ -55,13 +55,13 @@ class SignupForm extends Model
         $user->email = $this->email;
         $user->setPassword($this->password);
         $user->generateAuthKey();
-        $user->status = 10;//актив
+        $user->status = self::STATUS_ACTIVE;//актив
         $user->generateEmailVerificationToken();
         if ($user->save())
         {
             $r = new DbManager();
             $r->init();
-            $assign = $r->createRole('admin');
+            $assign = $r->createRole('user');
             $r->assign($assign, $user->id);
 
             $message = Yii::$app->mailer->compose();
@@ -79,24 +79,5 @@ class SignupForm extends Model
         {
             return null;
         }
-    }
-
-    /**
-     * Sends confirmation email to user
-     * @param User $user user model to with email should be send
-     * @return bool whether the email was sent
-     */
-    protected function sendEmail($user)
-    {
-        return Yii::$app
-            ->mailer
-            ->compose(
-                ['html' => 'emailVerify-html', 'text' => 'emailVerify-text'],
-                ['user' => $user]
-            )
-            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
-            ->setTo($this->email)
-            ->setSubject('Account registration at ' . Yii::$app->name)
-            ->send();
     }
 }
