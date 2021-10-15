@@ -52,7 +52,7 @@ return [
                     'message' => [
                         'from' => ['1@niig.su'],
                         'to' => ['jutnik_va@niig.su'],
-                        'subject' => 'Ошибка в программе медосмотр!',
+                        'subject' => 'Ошибка в программе!',
                     ],
                     'except' => [
                         'yii\web\HttpException:404',

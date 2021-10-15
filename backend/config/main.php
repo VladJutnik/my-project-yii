@@ -22,6 +22,7 @@ return [
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
+            //'baseUrl' => '/admin',
             'baseUrl' => '/admin',
         ],
         'authManager' => [
@@ -36,13 +37,6 @@ return [
         'session' => [
             // this is the name of the session cookie used for login on the backend
             'name' => 'advanced-backend',
-        ],
-        'db' => [
-            'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=localhost;dbname=network',
-            'username' => 'root',
-            'password' => 'root',
-            'charset' => 'utf8',
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
@@ -63,21 +57,21 @@ return [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
                 ],
-                /*[
+                [
                     'class' => 'yii\log\EmailTarget',
                     'mailer' => 'mailer',
                     'levels' => ['error'],
                     'message' => [
                         'from' => ['1@niig.su'],
-                        'to' => ['rsbrodov@mail.ru', 'esperos.nsk@gmail.com'],
-                        'subject' => 'Ошибка в программе питания',
+                        'to' => ['jutnik_va@niig.su'],
+                        'subject' => 'Ошибка в программе!',
                     ],
                     'except' => [
                         'yii\web\HttpException:404',
                         'yii\web\HttpException:429',
                         'yii\web\HeadersAlreadySentException'
                     ],
-                ],*/
+                ],
             ],
         ],
         'errorHandler' => [
