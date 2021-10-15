@@ -5,6 +5,7 @@ namespace frontend\models;
 use Yii;
 use yii\base\Model;
 use common\models\User;
+use yii\rbac\DbManager;
 
 /**
  * Signup form
@@ -24,14 +25,14 @@ class SignupForm extends Model
         return [
             ['username', 'trim'],
             ['username', 'required'],
-            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
+            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Этот логин уже занят.'],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
             ['email', 'trim'],
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
+            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Этот адрес электронной почты уже занят.'],
 
             ['password', 'required'],
             ['password', 'string', 'min' => Yii::$app->params['user.passwordMinLength']],
@@ -54,9 +55,30 @@ class SignupForm extends Model
         $user->email = $this->email;
         $user->setPassword($this->password);
         $user->generateAuthKey();
+        $user->status = 10;//актив
         $user->generateEmailVerificationToken();
+        if ($user->save())
+        {
+            $r = new DbManager();
+            $r->init();
+            $assign = $r->createRole('admin');
+            $r->assign($assign, $user->id);
 
-        return $user->save() && $this->sendEmail($user);
+            $message = Yii::$app->mailer->compose();
+            $message->setFrom(['1@niig.su' => '1@niig.su']);
+            $message->setTo($user->email)
+                ->setSubject('Программа тест')
+                ->setHtmlBody(
+                    '<p>Здравствуйте, ' . $user->username .
+                    '!</p><p>Вы были зарегистрированы в программе. 
+                    <p>Логин: ' . $this->username . ' </p> 
+                    <p>Пароль: ' . $this->password . ' </p>');
+            return $message->send();
+        }
+        else
+        {
+            return null;
+        }
     }
 
     /**
