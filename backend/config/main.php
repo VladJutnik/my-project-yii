@@ -77,14 +77,9 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*'view' => [
-            'theme' => [
-                'pathMap' => [
-                    '@app/views' => '@vendor/hail812/yii2-adminlte3/src/views/'
-                ],
-            ],
-        ],*/
-
+        'myComponent' => [
+            'class' => 'common\components\MyComponent',
+        ],
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
