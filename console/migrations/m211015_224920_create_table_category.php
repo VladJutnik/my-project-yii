@@ -27,6 +27,46 @@ class m211015_224920_create_table_category extends Migration
             'id',
             'CASCADE'
         );
+        $this->insert('category', [
+            'user_id' => '1',
+            'name' => 'Категория 1',
+            'status_view' => '0',
+        ]);
+        $this->insert('category', [
+            'user_id' => '1',
+            'name' => 'Категория 2',
+            'status_view' => '0',
+        ]);
+        $this->insert('category', [
+            'user_id' => '1',
+            'name' => 'Категория 3',
+            'status_view' => '0',
+        ]);
+        $this->insert('category', [
+            'user_id' => '1',
+            'name' => 'Категория 4',
+            'status_view' => '0',
+        ]);
+        $this->insert('category', [
+            'user_id' => '1',
+            'name' => 'Категория 5',
+            'status_view' => '0',
+        ]);
+        $this->insert('category', [
+            'user_id' => '1',
+            'name' => 'Категория 6',
+            'status_view' => '0',
+        ]);
+        $this->insert('category', [
+            'user_id' => '1',
+            'name' => 'Категория 7',
+            'status_view' => '0',
+        ]);
+        $this->insert('category', [
+            'user_id' => '1',
+            'name' => 'Категория 8',
+            'status_view' => '0',
+        ]);
     }
 
     /**
@@ -38,19 +78,4 @@ class m211015_224920_create_table_category extends Migration
 
         return false;
     }
-
-    /*
-    // Use up()/down() to run migration code without a transaction.
-    public function up()
-    {
-
-    }
-
-    public function down()
-    {
-        echo "m211015_224920_create_table_category cannot be reverted.\n";
-
-        return false;
-    }
-    */
 }
