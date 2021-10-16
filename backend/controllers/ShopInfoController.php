@@ -2,11 +2,14 @@
 
 namespace backend\controllers;
 
+use common\models\Category;
 use common\models\ShopInfo;
 use common\models\ShopStatistics;
+use common\models\ShopStatisticsSearch;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -74,8 +77,19 @@ class ShopInfoController extends Controller
      */
     public function actionView($id)
     {
+        $madel = $this->findModel($id);
+        $categories = ArrayHelper::map(Category::find()->where(['status_view' => '0'])->orderBy(['name' => SORT_ASC])->all(), 'id', 'name');
+
+        $searchModel = new ShopStatisticsSearch();
+        $search = Yii::$app->request->queryParams;
+
+        $dataProvider = $searchModel->search($search, $id);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $madel,
+            'categories' => $categories,
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
         ]);
     }
 

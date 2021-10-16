@@ -24,28 +24,6 @@ print_r(11111);*/
                 'pluginOptions' => ['allowClear' => true]
             ])?>
 
-
-   <!-- <?/*
-    $med_ifo1 = \common\models\Category::findOne($model->category_id);
-    $url = \yii\helpers\Url::to(['list']);
-    //$cityDesc = empty($model->mkb1) ? '' : Mkb10::findOne($model->mkb1)->diagnosis_code;
-
-    if (!empty($model->mkb_repeated3))
-    {
-
-        $value = $med_ifo1->name;
-        */?>
-
-        <?/*
-    }
-    else
-    {
-
-        $value = '';
-        */?>
-
-        --><?/*
-    } */?>
     <?$url = \yii\helpers\Url::to(['list']);?>
     <?=
     $form->field($model, 'category_id')->widget(Select2::classname(), [

@@ -15,7 +15,8 @@ $this->title = 'Список магазинов';
             <div class="card-title">
                 <div class="row">
                     <h4 class="mb-0 mt-2 ml-3"><?= Html::encode($this->title) ?></h4>
-                    <?= Html::a('Добавить новый магазин', ['create'], ['class' => 'btn btn-primary m-1 px-5 btn-sm']) ?>
+                    <?= Html::a('Добавить новый магазин', ['create'], ['class' => 'btn btn-primary ml-3 px-5 btn-sm']) ?>
+                    <?= Html::a('Добавить статистику по магазину', ['shop-statistics/create'], ['class' => 'btn btn-primary ml-3 px-5 btn-sm']) ?>
                 </div>
             </div>
             <hr/>

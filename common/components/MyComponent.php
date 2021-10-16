@@ -49,6 +49,12 @@ class MyComponent extends Component
         return date('d.m.Y', $old_date);
     }
 
+    public function dateStrBack($id)
+    {
+        $old_date = strtotime($id);
+        return date('Y-m-d', $old_date);
+    }
+
     public function shopName($id)
     {
         $model = ShopInfo::findOne($id);
