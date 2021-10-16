@@ -8,7 +8,7 @@ class MyComponent extends Component
 {
     public function statusView($id = false)
     {
-        $item =['показать',  'скрыть'];
+        $item = ['показать',  'скрыть'];
         if (!is_bool($id))
         {
             // echo 'есть id='. $id;
@@ -34,5 +34,10 @@ class MyComponent extends Component
     public function twoColumnInput()
     {
         return ['class' => 'form-control col-sm-12 col-md-12 col-lg-6 col-xl-6'];
+    }
+
+    public function twoColumnTextarea()
+    {
+        return ['rows' => 2, 'class' => 'form-control col-sm-12 col-md-12 col-lg-6 col-xl-6'];
     }
 }
