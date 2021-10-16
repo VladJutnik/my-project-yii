@@ -20,7 +20,8 @@
         "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
         "mpdf/mpdf": "^8.0",
         "kartik-v/yii2-widget-switchinput": "dev-master",
-        "phpnt/yii2-chartjs": "*"
+        "phpnt/yii2-chartjs": "*",
+        "kartik-v/yii2-widget-select2": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
