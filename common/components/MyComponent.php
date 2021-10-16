@@ -6,6 +6,20 @@ use yii\base\Component;
 
 class MyComponent extends Component
 {
+    public function statusView($id = false)
+    {
+        $item =['показать',  'скрыть'];
+        if (!is_bool($id))
+        {
+            // echo 'есть id='. $id;
+            return $item[$id];
+        }
+        else  {
+            //echo 'нет id';
+            return $item;
+        }
+    }
+
     public function userName($id)
     {
         $model = User::findOne($id);
