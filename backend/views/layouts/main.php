@@ -48,7 +48,7 @@ AppAsset::register($this);
                     <img src="/images/logo.png" class="logo-icon-2" alt="" />
                 </div>
                 <div>
-                    <h6 class="logo-text">ФБУН Новосибирский НИИ гигиены Роспотребнадзора</h6>
+                    <h6 class="logo-text">Тестовая программа</h6>
                 </div>
                 <a href="javascript:;" class="toggle-btn ml-auto"> <i class="bx bx-menu"></i>
                 </a>

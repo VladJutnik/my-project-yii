@@ -1,13 +1,13 @@
 <?php
 
-use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Html;
+
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Категории';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="category-index">
     <div class="card radius-15">
@@ -37,7 +37,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         'template' => '{view} {update} {delete}',
                         'contentOptions' => ['class' => 'action-column text-center'],
                         'buttons' => [
-
                             'view' => function ($url, $model, $key) {
                                 return Html::a('<span class="lni lni-magnifier"></span>', $url, [
                                     'title' => Yii::t('yii', 'Посмотреть'),
@@ -53,65 +52,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]);
                             },
                             'delete' => function ($url, $model, $key) {
-
                                 return Html::a('<span class="lni lni-trash"></span>', $url, [
                                     'title' => Yii::t('yii', 'Удалить'),
                                     'data-toggle' => 'tooltip',
                                     'class' => 'btn btn-outline-danger',
                                     'data' => ['confirm' => 'Вы уверены что хотите удалить пользователя?'],
                                 ]);
-
                             },
                         ],
                     ],
                 ],
             ]); ?>
-           <!-- /*= GridView::widget([
-                'dataProvider' => $dataProvider,
-                'columns' => [
-                    ['class' => 'yii\grid\SerialColumn'],
-
-                    //'id',
-                    [
-                        'attribute' => 'login_created',
-                        'value' => function ($model) {
-                            return Yii::$app->myComponent->userName($model->login_created);
-                        },
-                    ],
-                    'name',
-                    [
-                        'attribute' => 'status_view',
-                        'value' => function ($model) {
-                            return Yii::$app->myComponent->statusView($model->status_view);
-                        },
-                    ],
-                    'creat_at',
-
-                    [
-                        'header' => 'Увправление',
-                        'class' => 'yii\grid\ActionColumn',
-                        'template' => '{view} {update}',
-                        'contentOptions' => ['class' => 'action-column text-center'],
-                        'buttons' => [
-
-                            'view' => function ($url, $model, $key) {
-                                return Html::a('<span class="lni lni-magnifier"></span>', $url, [
-                                    'title' => Yii::t('yii', 'Посмотреть'),
-                                    'data-toggle' => 'tooltip',
-                                    'class' => 'btn btn-outline-primary'
-                                ]);
-                            },
-                            'update' => function ($url, $model, $key) {
-                                return Html::a('<span class="lni lni-pencil-alt"></span>', $url, [
-                                    'title' => Yii::t('yii', 'Редактировать'),
-                                    'data-toggle' => 'tooltip',
-                                    'class' => 'btn btn-outline-primary'
-                                ]);
-                            },
-                        ],
-                    ]
-                ],
-            ]); */?>-->
         </div>
     </div>
 </div>

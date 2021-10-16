@@ -7,33 +7,39 @@ use yii\widgets\DetailView;
 /* @var $model common\models\Category */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Categories', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
+//\yii\web\YiiAsset::register($this);
 ?>
 <div class="category-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'user_id',
-            'name',
-            'status_view',
-        ],
-    ]) ?>
-
+    <div class="container">
+        <div class="card radius-15">
+            <div class="card-body">
+                <div class="card-title">
+                    <h1><?= Html::encode($this->title) ?></h1>
+                    <p>
+                        <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+                        <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
+                            'class' => 'btn btn-danger',
+                            'data' => [
+                                'confirm' => 'Вы действительно хотите удалить категорию: '.$model->name.'?',
+                                'method' => 'post',
+                            ],
+                        ]) ?>
+                    </p>
+                </div>
+                <hr/>
+                <?= DetailView::widget([
+                    'model' => $model,
+                    'attributes' => [
+                        'name',
+                        [
+                            'attribute' => 'status_view',
+                            'value' => function ($model) {
+                                return Yii::$app->myComponent->statusView($model->status_view);
+                            },
+                        ],
+                    ],
+                ]) ?>
+            </div>
+        </div>
+    </div>
 </div>

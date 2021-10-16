@@ -27,7 +27,7 @@ class CategoryController extends Controller
                     [
                         'actions' => ['create', 'update', 'delete'],
                         'allow' => true,
-                        'roles' => ['admin', 'admin_organizations'],
+                        'roles' => ['admin'],
                         'denyCallback' => function () {
                             Yii::$app->session->setFlash("error", "У Вас нет доступа к этой страницы, пожалуйста, обратитесь к администратору!");
                             return $this->redirect(Yii::$app->request->referrer);
@@ -57,7 +57,7 @@ class CategoryController extends Controller
             'query' => Category::find()->where(['status_view'=>0]),
 
             'pagination' => [
-                'pageSize' => 25
+                'pageSize' => 5
             ],
             'sort' => [
                 'defaultOrder' => [
@@ -96,7 +96,7 @@ class CategoryController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['index']);
             }
         } else {
             $model->loadDefaultValues();
@@ -119,7 +119,7 @@ class CategoryController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [
@@ -136,8 +136,9 @@ class CategoryController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $model = $this->findModel($id);
+        $model->status_view = 1;
+        $model->save();
         return $this->redirect(['index']);
     }
 
