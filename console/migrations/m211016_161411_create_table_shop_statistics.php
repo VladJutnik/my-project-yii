@@ -18,6 +18,7 @@ class m211016_161411_create_table_shop_statistics extends Migration
             'category_id' => $this->integer()->notNull(),
             'data' => $this->string('10')->notNull(),
             'type_case' => $this->string('50')->notNull(),
+            'case' => $this->integer()->notNull(),
             'description' => $this->string()->notNull(),
         ]);
         //внешний ключ для user_id

@@ -35,7 +35,7 @@ $this->title = 'Список магазинов';
                     [
                         'header' => 'Увправление',
                         'class' => 'yii\grid\ActionColumn',
-                        'template' => '{onoff} {view} {update} {delete}',
+                        'template' => '{onoff} {create-statistic} {view} {update} {delete}',
                         'contentOptions' => ['class' => 'action-column text-center'],
                         'buttons' => [
                             'onoff' => function ($url, $model, $key) {
@@ -72,6 +72,26 @@ $this->title = 'Список магазинов';
                                     ]
                                 );*/
                             },
+                            'create-statistic' => function ($url, $model, $key) {
+                                /*return
+                                    Html::button('<span class="lni lni-plus"></span>', [
+                                        'data_id' => $model->id,
+                                        'class' => 'btn btn-outline-primary',
+                                        'title' => Yii::t('yii', 'Добавить статистические данные'),
+                                        'onclick' => '
+                                            $.get("create-statistic?id=" + $(this).attr("data_id"), function(data){
+                                            $("#showModal .modal-body").empty();
+                                            $("#showModal .modal-body").append(data);
+                                            $("#showModal").modal("show");
+                                        });'
+                                    ]);*/
+                                return Html::a('<span class="lni lni-plus"></span>', ['shop-statistics/create?id=' . $model->id], [
+                                    //return Html::a('<span class="glyphicon glyphicon-list-alt"></span> Акт', $url, [
+                                    'title' => Yii::t('yii', 'Добавить статистические данные'),
+                                    'data-toggle' => 'tooltip',
+                                    'class' => 'btn btn-outline-primary'
+                                ]);
+                            },
                             'view' => function ($url, $model, $key) {
                                 return Html::a('<span class="lni lni-magnifier"></span>', $url, [
                                     'title' => Yii::t('yii', 'Посмотреть'),
@@ -100,5 +120,18 @@ $this->title = 'Список магазинов';
             ]); ?>
         </div>
     </div>
+</div>
+<div class="modal fade" id="showModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Добавить статистические данные:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">	<span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-0">
 
+            </div>
+        </div>
+    </div>
 </div>

@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use common\models\ShopInfo;
+use common\models\ShopStatistics;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
@@ -25,7 +26,7 @@ class ShopInfoController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'onoff'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'create-statistic', 'onoff'],
                         'allow' => true,
                         'roles' => ['admin', 'user'],
                         'denyCallback' => function () {
@@ -50,7 +51,6 @@ class ShopInfoController extends Controller
     {
         $dataProvider = new ActiveDataProvider([
             'query' => ShopInfo::find(),
-            /*
             'pagination' => [
                 'pageSize' => 50
             ],
@@ -59,7 +59,6 @@ class ShopInfoController extends Controller
                     'id' => SORT_DESC,
                 ]
             ],
-            */
         ]);
 
         return $this->render('index', [
@@ -121,6 +120,24 @@ class ShopInfoController extends Controller
             'model' => $model,
         ]);
     }
+    public function actionCreateStatistic($id)
+    {
+        $this->layout = false;
+        $model = new ShopStatistics();
+
+        if ($this->request->isPost) {
+            if ($model->load($this->request->post()) && $model->save()) {
+                return $this->redirect(['index']);
+            }
+        } else {
+            $model->loadDefaultValues();
+        }
+
+        return $this->render('create-statistic', [
+            'model' => $model,
+            'id' => $id,
+        ]);
+    }
 
     /**
      * Deletes an existing ShopInfo model.
@@ -131,10 +148,9 @@ class ShopInfoController extends Controller
      */
     public function actionDelete($id)
     {
-        /*//Удаляем все записи о приходе и расходе по организации!
-        if ($this->findModel($id)->delete()){
-            //BloodTest::deleteall(['user_id' => $id]);
-        }*/
+        //Удаляем все записи о приходе и расходе по организации!
+        ShopStatistics::deleteall(['shop_id' => $id]);
+        $this->findModel($id)->delete();
         return $this->redirect(['index']);
     }
 

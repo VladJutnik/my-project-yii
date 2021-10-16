@@ -33,11 +33,12 @@ class ShopStatistics extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['shop_id', 'category_id', 'data', 'type_case', 'description'], 'required'],
-            [['shop_id', 'category_id'], 'integer'],
+            [['shop_id', 'category_id', 'data', 'type_case', 'case'], 'required'],
+            [['shop_id', 'category_id', 'case'], 'integer'],
             [['data'], 'string', 'max' => 10],
             [['type_case'], 'string', 'max' => 50],
             [['description'], 'string', 'max' => 255],
+            [['case'], 'integer', 'min' => 0],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
             [['shop_id'], 'exist', 'skipOnError' => true, 'targetClass' => ShopInfo::className(), 'targetAttribute' => ['shop_id' => 'id']],
         ];
@@ -50,11 +51,12 @@ class ShopStatistics extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'shop_id' => 'Shop ID',
-            'category_id' => 'Category ID',
-            'data' => 'Data',
-            'type_case' => 'Type Case',
-            'description' => 'Description',
+            'shop_id' => 'Магазин',
+            'category_id' => 'Категория',
+            'data' => 'Дата',
+            'type_case' => 'Расход/приход',
+            'case' => 'Сумма',
+            'description' => 'Краткое описание',
         ];
     }
 

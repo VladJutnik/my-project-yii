@@ -1,6 +1,8 @@
 <?php
 namespace common\components;
 
+use common\models\Category;
+use common\models\ShopInfo;
 use common\models\User;
 use yii\base\Component;
 
@@ -20,10 +22,43 @@ class MyComponent extends Component
         }
     }
 
+    public function statusBookkeeper($id = false)
+    {
+        $item = [
+            'enrollment' => 'приход',
+            'outlay' => 'расход'
+        ];
+        if($id)
+        {
+            return $item[$id];
+        }
+        else  {
+            return $item;
+        }
+    }
+
     public function userName($id)
     {
         $model = User::findOne($id);
         return $model->username;
+    }
+
+    public function dateStr($id)
+    {
+        $old_date = strtotime($id);
+        return date('d.m.Y', $old_date);
+    }
+
+    public function shopName($id)
+    {
+        $model = ShopInfo::findOne($id);
+        return $model->name;
+    }
+
+    public function categoryName($id)
+    {
+        $model = Category::findOne($id);
+        return $model->name;
     }
 
     public function twoColumnName()
