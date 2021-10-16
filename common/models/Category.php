@@ -30,7 +30,7 @@ class Category extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'name'], 'required'],
+            [['name'], 'required'],
             [['user_id', 'status_view'], 'integer'],
             [['name'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
@@ -44,17 +44,20 @@ class Category extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'user_id' => 'User ID',
-            'name' => 'Name',
-            'status_view' => 'Status View',
+            'user_id' => 'Кто добавил/изменил',
+            'name' => 'Название категории',
+            'status_view' => 'Статус отображения',
         ];
     }
 
-    /**
-     * Gets query for [[User]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
+    public function beforeSave($insert){
+        if (parent::beforeSave($insert)) {
+            $this->user_id = Yii::$app->user->identity->id;
+            return true;
+        }
+        return false;
+    }
+
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);

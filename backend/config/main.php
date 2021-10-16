@@ -86,7 +86,6 @@ return [
             'rules' => [
                 '/login' => 'site/login',
                 'defaultRoute' => 'site/index',
-                //'<controller><action>' => 'site/index',
             ],
         ],
     ],
