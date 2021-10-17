@@ -15,7 +15,7 @@ class m211015_212241_create_user_admin extends Migration
         $this->insert('user', [
             'id' => '1',
             'username' => 'admin@gmail.com',
-            'auth_key' => 'Gc2f3lEMoPzdAE1xvMbmFa_yQudgmR0Z',
+            'auth_key' => 'Gc2f3lEMoPzdAE1xvMbmFa_yQudgmR0Z', //пароль 123456789
             'password_hash' => '$2y$13$.EvBy.HzC/kOvnaT/1BXXuZTrEt/kX1FwYiev.evAZw1hHxdtDuuO',
             'email' => 'admin@gmail.com',
             'status' => '10',

@@ -5,6 +5,7 @@ namespace backend\controllers;
 use common\models\Category;
 use common\models\LoginForm;
 use common\models\ShopInfo;
+use common\models\ShopInfoSim;
 use common\models\ShopStatistics;
 use common\models\User;
 use Yii;
@@ -12,6 +13,7 @@ use yii\data\ActiveDataProvider;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
+use yii\rbac\DbManager;
 use yii\web\Controller;
 use yii\web\Response;
 
@@ -34,7 +36,7 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index', 'admins', 'subjectslist', 'user-index', 'login-input', 'view-user'],
+                        'actions' => ['logout', 'index', 'admins', 'subjectslist', 'user-index', 'login-input', 'view-user', 'simulation', 'simulation-start'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -438,6 +440,133 @@ class SiteController extends Controller
             return $this->goHome();
         }
     }
+    //симуляционная нагрузка пока без отката :(
+    public function actionSimulation()
+    {
+        $str = '';
+
+        return $this->render('simulation', [
+            'str' => $str
+        ]);
+    }
+
+    public function actionSimulationStart()
+    {
+        $str = '';
+
+        $upl_ids = []; // для отката записей в случаи чего
+        for($i = 0; $i <= 5; $i++){
+            $model_user = new User();
+            $model_user->username = $i.'admin@gmail.com';
+            $model_user->auth_key = 'Gc2f3lEMoPzdAE1xvMbmFa_yQudgmR0Z'; //пароль 123456789
+            $model_user->password_hash = '$2y$13$.EvBy.HzC/kOvnaT/1BXXuZTrEt/kX1FwYiev.evAZw1hHxdtDuuO';
+            $model_user->email = $i.'admin@gmail.com';
+            $model_user->status = '10';
+            $model_user->created_at = '1634329569';
+            $model_user->updated_at = '1634329569';
+            $model_user->verification_token = '00X1lMw1qf23hbVmI0izreeYqbDULp98_1634329569';
+            $model_user->save(); //сохран
+
+            $r = new DbManager();
+            $r->init();
+            $assign = $r->createRole('user');
+            $r->assign($assign, $model_user->id);
+
+            $upl_ids[] .= $model_user->id;
+        }
+        $str .= 'Создано пользователей - '.$i.';<br>';
+        //print_r($upl_ids);
+        //exit();
+
+        $amount = [
+            '6200',
+            '8200',
+            '9200',
+            '12000',
+            '11000',
+            '14000',
+            '18200',
+            '19200',
+            '29200',
+            '39200',
+            '49200',
+            '59200',
+            '69200',
+            '79200',
+            '89200',
+            '99200',
+            '112000',
+            '111000',
+            '114000',
+        ];
+        $amount2 = [
+            '1',
+            '2',
+            '3',
+        ];
+        $item = [//+
+            '0' => 'enrollment',
+            '1' => 'outlay'
+        ];
+        //$item_rand = mt_rand(0, count($item) - 1); // Берём случайное число от 0 до (длины массива минус 1) включительно
+        /*print_r(count($upl_ids));
+        print_r('<br>');
+        print_r($upl_ids);
+        exit();*/
+        $num = 1;
+        for($l = 0; $l < count($upl_ids); $l++){
+            //$balance_rand = mt_rand(0, count($amount) - 1); // Берём случайное число от 0 до (длины массива минус 1) включительно
+            //$item_rand = mt_rand(0, count($item) - 1); // Берём случайное число от 0 до (длины массива минус 1) включительно
+            //$item[$item_rand]
+            for($k = 0; $k <= 1; $k++){
+                $model_shop = new ShopInfoSim();
+                $model_shop->user_id = $upl_ids[$l];
+                $model_shop->name = 'магазин '.$k;
+                $model_shop->description = '';
+                $model_shop->status_view = 0;
+                $model_shop->save(false); //сохран
+                for($g = 0; $g <= 4; $g++){
+                    /*'shop_id' => 'Магазин',
+                    'category_id' => 'Категория',
+                    'data' => 'Дата',
+                    'type_case' => 'Расход/приход',
+                    'case' => 'Сумма',
+                    'description' => 'Краткое описание',*/
+                    $item_rand = mt_rand(0, count($item) - 1); // Берём случайное число от 0 до (длины массива минус 1) включительно
+                    $balance_rand = mt_rand(0, count($amount) - 1);
+                    $rand = mt_rand(0, count($amount2) - 1);
+
+                    $model_shopS = new ShopStatistics();
+                    $model_shopS->shop_id = $model_shop->id;
+                    $model_shopS->category_id = $amount2[$rand];
+                    $model_shopS->data = '2021-10-18';
+                    $model_shopS->type_case = $item[$item_rand];
+                    $model_shopS->case = $amount[$balance_rand];
+                    $model_shopS->description = '';
+                    $model_shopS->save(false); //сохран
+                }
+            }
+            /*
+            $str .=
+                'Польз - ' . $motherfucker->name .
+                ' Добавленные баланс - ' . $amount[$balance_rand] .
+                ' id в таб ProductsUser - '.$model_products->id .
+                ' id в таб Payments - '.$model_payments->id .
+                ' id в таб Payments - '.$model_payments->id .
+                ' '.$level_1_purchase .
+                ' пытался купить пакет - '.$purchase_rand .
+                ' оставшийся баланс - '.$balance .
+                ' '.$str_ball .
+                ' '.$str_dol .
+                '<br><br>'; // Вся информация по человеку !!!*/
+            $num++;
+        }
+
+        return $this->render('simulation', [
+            'str' => $str
+        ]);
+    }
+
     /**
      * Login action.
      *
