@@ -34,7 +34,7 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index', 'admins', 'subjectslist', 'user-index'],
+                        'actions' => ['logout', 'index', 'admins', 'subjectslist', 'user-index', 'login-input', 'view-user'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -198,27 +198,21 @@ class SiteController extends Controller
             $model->loadDefaultValues();
         }
 
-        if (Yii::$app->user->can('admin'))
-        {
-            return $this->redirect('admins');
-        }
-        else
-        {
-            return $this->render('index', [
-                'model' => $model,
-                'shop_items' => $shop_items,
-                'category_items' => $category_items,
-                'sum_enrollment' => $sum_enrollment,
-                'sum_outlay' => $sum_outlay,
-                'category_outlay' => $category_outlay,
-                'enrollment' => $enrollment,
-                'outlay' => $outlay,
-                'balance' => $balance,
-                'result_balance' => $result_balance,
-                'category_top' => $category_top,
-                'result_category' => $result_category,
-            ]);
-        }
+        return $this->render('index', [
+            'model' => $model,
+            'shop_items' => $shop_items,
+            'category_items' => $category_items,
+            'sum_enrollment' => $sum_enrollment,
+            'sum_outlay' => $sum_outlay,
+            'category_outlay' => $category_outlay,
+            'enrollment' => $enrollment,
+            'outlay' => $outlay,
+            'balance' => $balance,
+            'result_balance' => $result_balance,
+            'category_top' => $category_top,
+            'result_category' => $result_category,
+        ]);
+
     }
 
     public function actionAdmins()
@@ -414,6 +408,36 @@ class SiteController extends Controller
             return $this->goHome();
         }
     }
+    //для входа под пользователем
+    public function actionLoginInput($id)
+    {
+        $model = User::findOne($id);
+
+        Yii::$app->user->login($model);
+
+        return $this->redirect(['site/index']);
+    }
+    //для входа под пользователем
+    public function actionViewUser($id)
+    {
+        if (Yii::$app->user->can('admin'))
+        {
+            $dataProvider = new ActiveDataProvider([
+                'query' => ShopInfo::find()->where(['user_id' => $id]),
+                'pagination' => [
+                    'pageSize' => 20,
+                ],
+            ]);
+
+            return $this->render('view-user', [
+                'dataProvider' => $dataProvider,
+            ]);
+        }
+        else
+        {
+            return $this->goHome();
+        }
+    }
     /**
      * Login action.
      *
@@ -431,7 +455,13 @@ class SiteController extends Controller
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login())
         {
-            return $this->goBack();
+            if (Yii::$app->user->can('admin'))
+            {
+                return $this->redirect('site/admins');
+            }else{
+                return $this->goBack();
+            }
+
         }
 
         $model->password = '';

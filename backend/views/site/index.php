@@ -172,7 +172,7 @@ $this->title = 'Пример Backend-а';
                         ?>
                     </div>
                     <hr/>
-                    <table id="tableId" class="table table-bordered table-sm">
+                    <table id="tableId" class="table table-bordered table-sm ">
                         <tr>
                             <th colspan="10" class="text-center">Список трат</th>
                         </tr>

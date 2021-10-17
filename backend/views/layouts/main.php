@@ -55,7 +55,12 @@ AppAsset::register($this);
             </div>
             <!--боковое меню-->
             <ul class="metismenu" id="menu">
-                <li><?= Html::a('<div class="parent-icon icon-color-1"><i class="bx bx-home-alt"></i></div> <div class="menu-title">Главная</div>', ['/site/index']) ?></li>
+               <? if(Yii::$app->user->can('admin')) {?>
+                   <li><?= Html::a('<div class="parent-icon icon-color-1"><i class="bx bx-home-alt"></i></div> <div class="menu-title">Главная</div>', ['/site/admins']) ?></li>
+               <?}else{?>
+                   <li><?= Html::a('<div class="parent-icon icon-color-1"><i class="bx bx-home-alt"></i></div> <div class="menu-title">Главная</div>', ['/site/index']) ?></li>
+
+               <?}?>
                 <li><?= Html::a('<div class="parent-icon icon-color-4"><i class="lni lni-database"></i></div> <div class="menu-title">Список категорий</div>', ['/category/index']) ?></li>
                 <li><?= Html::a('<div class="parent-icon icon-color-3"><i class="lni lni-shopping-basket"></i></div> <div class="menu-title">Список магазинов</div>', ['/shop-info/index']) ?></li>
                 <? if(Yii::$app->user->can('admin')) {?>

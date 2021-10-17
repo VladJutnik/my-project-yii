@@ -53,7 +53,7 @@ class ShopInfoController extends Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => ShopInfo::find(),
+            'query' => ShopInfo::find()->where(['user_id' => Yii::$app->user->identity->id]),
             'pagination' => [
                 'pageSize' => 50
             ],

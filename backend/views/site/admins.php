@@ -26,7 +26,7 @@ $this->title = 'Пример Backend-а админа';
                     'class' => 'form-control',
                     'onchange' => '
                         console.log(1111)
-                        $.get("site/subjectslist?id="+$(this).val(), function(data){
+                        $.get("./subjectslist?id="+$(this).val(), function(data){
                         
                             $("select#shopinfo-name").html(data);
                          });
@@ -183,7 +183,7 @@ $this->title = 'Пример Backend-а админа';
                         ?>
                     </div>
                     <hr/>
-                    <table id="tableId" class="table table-bordered table-sm">
+                    <table id="tableId" class="table table-bordered table-sm ">
                         <tr>
                             <th colspan="10" class="text-center">Список трат</th>
                         </tr>
