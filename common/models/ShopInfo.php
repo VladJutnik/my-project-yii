@@ -34,8 +34,8 @@ class ShopInfo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'report_user'], 'required'],
-            [['user_id', 'status_view'], 'integer'],
+            [['name'], 'required'],
+            [['user_id', 'status_view', 'report_user'], 'integer'],
             [['description'], 'string'],
             [['name'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
