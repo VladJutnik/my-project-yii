@@ -1,7 +1,5 @@
 <?php
 
-/* @var $this yii\web\View */
-
 use common\models\Category;
 use kartik\select2\Select2;
 use miloschuman\highcharts\Highcharts;
@@ -9,8 +7,10 @@ use yii\bootstrap4\ActiveForm;
 use yii\bootstrap4\Html;
 use phpnt\chartJS\ChartJs;
 
-$this->title = 'Пример Backend-а';
+
+$this->title = 'Пример Backend-а админа';
 ?>
+
 <div class="site-index">
     <div class="container-fluid">
         <div class="card radius-15">
@@ -21,6 +21,17 @@ $this->title = 'Пример Backend-а';
                 <hr/>
                 <?php $form = ActiveForm::begin(); ?>
 
+                <?= $form->field($model, 'user_id')->dropDownList($user_items, [
+                    'options' => [$_SESSION['user'] => ['Selected' => true]],
+                    'class' => 'form-control',
+                    'onchange' => '
+                        console.log(1111)
+                        $.get("site/subjectslist?id="+$(this).val(), function(data){
+                        
+                            $("select#shopinfo-name").html(data);
+                         });
+                        '
+                    ])->label('Выберите пользователя: '); ?>
                 <?= $form->field($model, 'name')
                     ->widget(
                         Select2::classname(),

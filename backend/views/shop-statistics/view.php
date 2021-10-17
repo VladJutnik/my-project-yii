@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model common\models\ShopStatistics */
 
-$this->title = Yii::$app->myComponent->dateStr($model->data);;
+$this->title = Yii::$app->myComponent->dateStr($model->data);
 
 \yii\web\YiiAsset::register($this);
 ?>

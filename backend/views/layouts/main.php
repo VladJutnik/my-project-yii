@@ -45,7 +45,7 @@ AppAsset::register($this);
         <div class="sidebar-wrapper" data-simplebar="true">
             <div class="sidebar-header">
                 <div class="">
-                    <img src="/images/logo.png" class="logo-icon-2" alt="" />
+                    <img src="/backend/web/images/logo.png" class="logo-icon-2" alt="" />
                 </div>
                 <div>
                     <h6 class="logo-text">Тестовая программа</h6>
@@ -58,6 +58,9 @@ AppAsset::register($this);
                 <li><?= Html::a('<div class="parent-icon icon-color-1"><i class="bx bx-home-alt"></i></div> <div class="menu-title">Главная</div>', ['/site/index']) ?></li>
                 <li><?= Html::a('<div class="parent-icon icon-color-4"><i class="lni lni-database"></i></div> <div class="menu-title">Список категорий</div>', ['/category/index']) ?></li>
                 <li><?= Html::a('<div class="parent-icon icon-color-3"><i class="lni lni-shopping-basket"></i></div> <div class="menu-title">Список магазинов</div>', ['/shop-info/index']) ?></li>
+                <? if(Yii::$app->user->can('admin')) {?>
+                    <li><?= Html::a('<div class="parent-icon icon-color-5"><i class="lni lni-users"></i></div> <div class="menu-title">Список пользователей</div>', ['/site/user-index']) ?></li>
+                <?}?>
             </ul>
         </div>
         <header style="position: static !important;" class="top-header">

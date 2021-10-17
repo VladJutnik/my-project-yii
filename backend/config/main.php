@@ -93,6 +93,7 @@ return [
             'rules' => [
                 '/login' => 'site/login',
                 'defaultRoute' => 'site/index',
+                'admins' => 'site/admins',
             ],
         ],
     ],

@@ -14,9 +14,9 @@ class AppAsset extends AssetBundle
     public $css = [
         'css/site.css',
         'assets-custom/plugins/metismenu/css/metisMenu.min.css',
-        //'assets-custom/css/pace.min.css',
-        //'assets-custom/js/pace.min.js',
-        //'assets-custom/css/bootstrap.min.css',
+        'assets-custom/css/pace.min.css',
+        'assets-custom/js/pace.min.js',
+        'assets-custom/css/bootstrap.min.css',
         'assets-custom/css/icons.css',
         'assets-custom/css/app.css',
         'assets-custom/css/dark-sidebar.css',

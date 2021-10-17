@@ -92,3 +92,10 @@ a.desc:after {
 .btn{
     text-transform: none !important;
 }
+
+.card-body2 {
+    -ms-flex: 1 1 auto !important;
+    flex: 1 1 auto !important;
+    min-height: 1px !important;
+    padding: 1.25rem !important;
+}

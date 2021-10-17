@@ -17,6 +17,9 @@ use Yii;
  */
 class ShopInfo extends \yii\db\ActiveRecord
 {
+    public $report_user;
+    public $report_category_id;
+    public $report_data;
     /**
      * {@inheritdoc}
      */
@@ -31,7 +34,7 @@ class ShopInfo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
+            [['name', 'report_user'], 'required'],
             [['user_id', 'status_view'], 'integer'],
             [['description'], 'string'],
             [['name'], 'string', 'max' => 255],
@@ -50,6 +53,10 @@ class ShopInfo extends \yii\db\ActiveRecord
             'name' => 'Название магазина',
             'description' => 'Пометки по магазину',
             'status_view' => 'Статус отображения',
+            //поля для отчета
+            'report_user' => 'Пользователь',
+            'report_category_id' => 'Категория',
+            'report_data' => 'Дата',
         ];
     }
 

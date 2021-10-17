@@ -22,7 +22,7 @@
         "phpnt/yii2-chartjs": "*",
         "kartik-v/yii2-widget-select2": "dev-master",
         "yiisoft/yii2-bootstrap4": "~2.0.0",
-        "yiisoft/yii2-bootstrap": "*"
+        "miloschuman/yii2-highcharts-widget": "^8.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
