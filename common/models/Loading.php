@@ -35,4 +35,13 @@ class Loading extends Model
             'file' => 'Загрузка csv',
         ];
     }
+    function randomFileName($path, $extension)
+    {
+        do {
+            $name = mt_rand(0, 9999999);
+            $file = $path . $name . '.'. $extension;
+        } while (file_exists($file));
+        $name_new = $name . '.'. $extension;
+        return $name_new;
+    }
 }

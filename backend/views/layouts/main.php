@@ -63,6 +63,7 @@ AppAsset::register($this);
                <?}?>
                 <li><?= Html::a('<div class="parent-icon icon-color-4"><i class="lni lni-database"></i></div> <div class="menu-title">Список категорий</div>', ['/category/index']) ?></li>
                 <li><?= Html::a('<div class="parent-icon icon-color-3"><i class="lni lni-shopping-basket"></i></div> <div class="menu-title">Список магазинов</div>', ['/shop-info/index']) ?></li>
+                <li><?= Html::a('<div class="parent-icon icon-color-6"><i class="lni lni-upload"></i></div> <div class="menu-title">Загрузка cvs</div>', ['/shop-info/loading']) ?></li>
                 <? if(Yii::$app->user->can('admin')) {?>
                     <li><?= Html::a('<div class="parent-icon icon-color-5"><i class="lni lni-users"></i></div> <div class="menu-title">Список пользователей</div>', ['/site/user-index']) ?></li>
                 <?}?>

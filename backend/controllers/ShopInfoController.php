@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use common\models\Category;
+use common\models\Loading;
 use common\models\ShopInfo;
 use common\models\ShopStatistics;
 use common\models\ShopStatisticsSearch;
@@ -29,7 +30,7 @@ class ShopInfoController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'create-statistic', 'onoff'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'loading', 'create-statistic', 'onoff'],
                         'allow' => true,
                         'roles' => ['admin', 'user'],
                         'denyCallback' => function () {
@@ -134,6 +135,7 @@ class ShopInfoController extends Controller
             'model' => $model,
         ]);
     }
+
     public function actionCreateStatistic($id)
     {
         $this->layout = false;
@@ -187,6 +189,103 @@ class ShopInfoController extends Controller
         {
             return false;
         }
+    }
+    //загрузка cvs
+    public function actionLoading()
+    {
+        if (Yii::$app->user->isGuest)
+        {
+            return $this->goHome();
+        }
+        ini_set('max_execution_time', 3600);
+        ini_set('memory_limit', '5092M');
+        ini_set("pcre.backtrack_limit", "5000000");
+        $model = new Loading();
+        $shop_null = array('' => 'Выберите магазин ...');
+        $shop = ShopInfo::find()->where(['user_id' => Yii::$app->user->identity->id, 'status_view' => '0'])->all();
+        $shop_items = ArrayHelper::map($shop, 'id', 'name');
+        $shop_items = ArrayHelper::merge($shop_null, $shop_items);
+        if (Yii::$app->request->post())
+        {
+            $post = Yii::$app->request->post()['Loading'];
+            if ($_FILES)
+            {
+                //print_r(dirname(__DIR__). '\web\upl\ ' );
+                //print_r($post);
+                $path = dirname(__DIR__). '\web\upl\ '; //папака в которой лежит файл
+                $extension = strtolower(substr(strrchr($_FILES['Loading']['name']['file'], '.'), 1));//узнали в каком формате файл пришел
+                $file_name = $model->randomFileName($path, $extension); // сделали новое имя с проверкой есть ли такое имя в папке
+                if (move_uploaded_file($_FILES['Loading']['tmp_name']['file'], $path . $file_name))
+                { // переместили из временной папки, в которую изначально загрулся файл в новую директорию с новым именем
+                    if (($file_list = fopen($path . $file_name, 'r')) !== false)
+                    {//ищем файл в директории
+                        $j = 0;
+                        $out = [];
+                        //читаем фйал в директории
+                        while (($data = fgetcsv($file_list, 50000, ";")))
+                        {
+                            for ($i = 0; $i < count($data); $i++)
+                            {
+                                $out[$j][$i] .= $data[$i];
+                            }
+                            $j++;
+                        }
+                        unset($out[0]);//удалил первую строку
+                        $out_save = array_values($out);
+                        $upl_id = []; // для отката записей в случаи чего
+                        for ($i = 0; $i < count($out_save); $i++)
+                        {
+                            if($out_save[$i][1] != ''){
+                                $model_upl = new ShopStatistics();
+                                $model_upl->shop_id = $post['name'];
+                                $model_upl->category_id = $out_save[$i][1];
+                                $model_upl->data = Yii::$app->myComponent->dateStrBack($out_save[$i][2]);
+                                $model_upl->type_case = $out_save[$i][3];
+                                $model_upl->case = $out_save[$i][4];
+                                $model_upl->description = $out_save[$i][5];
+
+                                if ($model_upl->save())
+                                {
+                                    $upl_id[] .= $model_upl->id;
+                                }
+                                else
+                                {
+                                    ShopStatistics::deleteall(['in', 'id', $upl_id]); //удаляем всех загрузившихся пациентов если ошибка
+                                    Yii::$app->session->setFlash("error", "Что то пошло не так");
+                                    return $this->render('loading', [
+                                        'model' => $model,
+                                        'shop_items' => $shop_items,
+                                    ]);
+                                }
+                            }
+                        }
+
+                        Yii::$app->session->setFlash("success", "Все отлично");
+                        return $this->render('loading', [
+                            'model' => $model,
+                            'shop_items' => $shop_items,
+                        ]);
+                    }
+                    else
+                    {
+                        Yii::$app->session->setFlash('error', "Не удалось прочесть файл!");
+                    }
+                }
+                else
+                {
+                    Yii::$app->session->setFlash('error', "Не удалось загрузить файл!");
+                }
+            }
+            else
+            {
+                Yii::$app->session->setFlash('error', "Что то пошло не так!");
+            }
+
+        }
+        return $this->render('loading', [
+            'model' => $model,
+            'shop_items' => $shop_items,
+        ]);
     }
 
     /**
