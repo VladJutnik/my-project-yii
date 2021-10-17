@@ -16,7 +16,7 @@ return [
             'class' => 'yii\db\Connection',
             'dsn' => 'mysql:host=localhost;dbname=custom-yii2',
             'username' => 'root',
-            'password' => 'Lampa6516',
+            'password' => '',
             'charset' => 'utf8',
         ],
     ],

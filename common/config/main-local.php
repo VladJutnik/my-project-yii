@@ -6,7 +6,7 @@ return [
             'class' => 'yii\db\Connection',
             'dsn' => 'mysql:host=localhost;dbname=custom-yii2',
             'username' => 'root',
-            'password' => 'Lampa6516',
+            'password' => '',
             'charset' => 'utf8',
         ],
         'mailer' => [
@@ -15,7 +15,7 @@ return [
                 'class' => 'Swift_SmtpTransport',
                 'host' => 'smtp.yandex.ru',
                 'username' => '1@niig.su',
-                'password' => 'Lampa6516',
+                'password' => '',
                 'port' => 465,
                 'encryption' => 'ssl',
             ],
