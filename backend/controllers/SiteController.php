@@ -223,7 +223,7 @@ class SiteController extends Controller
         $category_null = array('' => 'Выберите ...');
         $user = User::find()->where(['status' => 10])->all();
         $user_items = ArrayHelper::map($user, 'id', 'username');
-        $user_items = ArrayHelper::merge($category_null, $user_items);
+
         $category = Category::find()->where(['status_view' => '0'])->all();
         $category_items = ArrayHelper::map($category, 'id', 'name');
         $category_items = ArrayHelper::merge($category_null, $category_items);
