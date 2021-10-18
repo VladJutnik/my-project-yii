@@ -38,7 +38,7 @@ class ShopStatistics extends \yii\db\ActiveRecord
             [['data'], 'string', 'max' => 10],
             [['type_case'], 'string', 'max' => 50],
             [['description'], 'string', 'max' => 255],
-            [['case'], 'integer', 'min' => 0],
+            [['case'], 'integer', 'min' => 0, 'max' => 9999999999],
             [
                 ['category_id'],
                 'exist',
