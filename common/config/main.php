@@ -20,4 +20,13 @@ return [
             'charset' => 'utf8',
         ],
     ],
+     'container' => [
+        'definitions' => [
+            \yii\widgets\LinkPager::class => \yii\bootstrap4\LinkPager::class,
+            'yii\bootstrap4\LinkPager' => [
+                'firstPageLabel' => 'В начало',
+                'lastPageLabel'  => 'В конец'
+            ]
+        ],
+    ],
 ];
