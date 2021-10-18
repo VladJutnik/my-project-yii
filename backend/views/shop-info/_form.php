@@ -10,18 +10,27 @@ use yii\bootstrap4\Html;
 
 <div class="shop-info-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php
+    $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'name', Yii::$app->myComponent->twoColumnName())->textInput(Yii::$app->myComponent->twoColumnInput()) ?>
+    <?= $form->field($model, 'name', Yii::$app->myComponent->twoColumnName())->textInput(
+        Yii::$app->myComponent->twoColumnInput()
+    ) ?>
 
-    <?= $form->field($model, 'description', Yii::$app->myComponent->twoColumnName())->textarea(Yii::$app->myComponent->twoColumnTextarea()) ?>
+    <?= $form->field($model, 'description', Yii::$app->myComponent->twoColumnName())->textarea(
+        Yii::$app->myComponent->twoColumnTextarea()
+    ) ?>
 
-    <?= $form->field($model, 'status_view', Yii::$app->myComponent->twoColumnName())->dropDownList(Yii::$app->myComponent->statusView(), Yii::$app->myComponent->twoColumnInput()) ?>
+    <?= $form->field($model, 'status_view', Yii::$app->myComponent->twoColumnName())->dropDownList(
+        Yii::$app->myComponent->statusView(),
+        Yii::$app->myComponent->twoColumnInput()
+    ) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-outline-primary mt-3 px-5 radius-30 btn-block']) ?>
     </div>
 
-    <?php ActiveForm::end(); ?>
+    <?php
+    ActiveForm::end(); ?>
 
 </div>

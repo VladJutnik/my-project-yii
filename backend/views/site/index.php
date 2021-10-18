@@ -19,7 +19,8 @@ $this->title = 'Пример Backend-а';
                     <h5>Выбор статистики по магазину:</h5>
                 </div>
                 <hr/>
-                <?php $form = ActiveForm::begin(); ?>
+                <?php
+                $form = ActiveForm::begin(); ?>
 
                 <?= $form->field($model, 'name')
                     ->widget(
@@ -31,7 +32,8 @@ $this->title = 'Пример Backend-а';
                                 'options' => [$_SESSION['name'] => ['Selected' => true]],
                             ],
                             'pluginOptions' => ['allowClear' => true]
-                        ])?>
+                        ]
+                    ) ?>
 
                 <?= $form->field($model, 'report_category_id')
                     ->widget(
@@ -43,15 +45,28 @@ $this->title = 'Пример Backend-а';
                                 'options' => [$_SESSION['report_category_id'] => ['Selected' => true]],
                             ],
                             'pluginOptions' => ['allowClear' => true]
-                        ])?>
-                <?= $form->field($model, 'report_data')->textInput(['type' => 'date', 'maxlength' => true, 'class' => 'form-control', 'value'=>$_SESSION['report_data']]) ?>
+                        ]
+                    ) ?>
+                <?= $form->field($model, 'report_data')->textInput(
+                    [
+                        'type' => 'date',
+                        'maxlength' => true,
+                        'class' => 'form-control',
+                        'value' => $_SESSION['report_data']
+                    ]
+                ) ?>
                 <div class="form-group">
-                    <?= Html::submitButton('Показать', ['class' => 'btn btn-outline-primary mt-3 px-5 radius-30 btn-block']) ?>
+                    <?= Html::submitButton(
+                        'Показать',
+                        ['class' => 'btn btn-outline-primary mt-3 px-5 radius-30 btn-block']
+                    ) ?>
                 </div>
 
-                <?php ActiveForm::end(); ?>
+                <?php
+                ActiveForm::end(); ?>
                 <hr/>
-                <?if(!empty($category_outlay) || !empty($enrollment) || !empty($outlay) || !empty($sum_enrollment) || !empty($sum_outlay) || !empty($result_balance)){?>
+                <?
+                if (!empty($category_outlay) || !empty($enrollment) || !empty($outlay) || !empty($sum_enrollment) || !empty($sum_outlay) || !empty($result_balance)) { ?>
                     <h5 class="text-center">Просмотр статистики по магазину:</h5>
                     <div class="row">
                         <div class="col-12 col-lg-4">
@@ -182,18 +197,27 @@ $this->title = 'Пример Backend-а';
                             <th class="text-center">Категория</th>
                             <th class="text-center">Дата</th>
                         </tr>
-                        <?for($i = 0; $i < 10; $i++){
-                            if($category_top[$i][0] != ''){?>
+                        <?
+                        for ($i = 0; $i < 10; $i++) {
+                            if ($category_top[$i][0] != '') {
+                                ?>
                                 <tr>
-                                    <td class="text-center"><?=$category_top[$i][0]?></td>
-                                    <td class="text-center"><?=$category_top[$i][1]?></td>
-                                    <td class="text-center"><?=Yii::$app->myComponent->categoryName($category_top[$i][2])?></td>
-                                    <td class="text-center"><?=Yii::$app->myComponent->dateStr($category_top[$i][3])?></td>
+                                    <td class="text-center"><?= $category_top[$i][0] ?></td>
+                                    <td class="text-center"><?= $category_top[$i][1] ?></td>
+                                    <td class="text-center"><?= Yii::$app->myComponent->categoryName(
+                                            $category_top[$i][2]
+                                        ) ?></td>
+                                    <td class="text-center"><?= Yii::$app->myComponent->dateStr(
+                                            $category_top[$i][3]
+                                        ) ?></td>
                                 </tr>
-                            <?}?>
-                        <?}?>
+                            <?
+                            } ?>
+                        <?
+                        } ?>
                     </table>
-                <?}?>
+                <?
+                } ?>
 
             </div>
         </div>

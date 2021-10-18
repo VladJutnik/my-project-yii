@@ -11,6 +11,7 @@ use yii\bootstrap4\Html;
 
 $this->title = 'Редактировать данные за: ' . $model->data;
 ?>
+
 <div class="shop-statistics-update">
     <div class="category-update">
         <div class="container">
@@ -20,21 +21,29 @@ $this->title = 'Редактировать данные за: ' . $model->data;
                         <h1><?= Html::encode($this->title) ?></h1>
                     </div>
                     <hr/>
-                    <?php $form = ActiveForm::begin(); ?>
+                    <?php
+                    $form = ActiveForm::begin(); ?>
 
-                    <?= $form->field($model, 'data')->textInput(['type' => 'date', 'maxlength' => true, 'class' => 'form-control']) ?>
+                    <?= $form->field($model, 'data')->textInput(
+                        ['type' => 'date', 'maxlength' => true, 'class' => 'form-control']
+                    ) ?>
 
                     <?= $form->field($model, 'type_case')->dropDownList(Yii::$app->myComponent->statusBookkeeper()) ?>
 
                     <?= $form->field($model, 'case')->textInput(['class' => 'form-control']) ?>
 
-                    <?= $form->field($model, 'description')->textInput(['maxlength' => true, 'class' => 'form-control']) ?>
+                    <?= $form->field($model, 'description')->textInput(['maxlength' => true, 'class' => 'form-control']
+                    ) ?>
 
                     <div class="form-group">
-                        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-outline-primary mt-3 px-5 radius-30 btn-block']) ?>
+                        <?= Html::submitButton(
+                            'Сохранить',
+                            ['class' => 'btn btn-outline-primary mt-3 px-5 radius-30 btn-block']
+                        ) ?>
                     </div>
 
-                    <?php ActiveForm::end(); ?>
+                    <?php
+                    ActiveForm::end(); ?>
                 </div>
             </div>
         </div>

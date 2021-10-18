@@ -7,6 +7,7 @@ use yii\helpers\Html;
 
 $this->title = 'Добавление нового магазина';
 ?>
+
 <div class="shop-info-create">
     <div class="container">
         <div class="card radius-15">

@@ -20,6 +20,7 @@ class ShopInfo extends \yii\db\ActiveRecord
     public $report_user;
     public $report_category_id;
     public $report_data;
+
     /**
      * {@inheritdoc}
      */
@@ -38,7 +39,13 @@ class ShopInfo extends \yii\db\ActiveRecord
             [['user_id', 'status_view', 'report_user'], 'integer'],
             [['description'], 'string'],
             [['name'], 'string', 'max' => 255],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [
+                ['user_id'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => User::className(),
+                'targetAttribute' => ['user_id' => 'id']
+            ],
         ];
     }
 
@@ -60,7 +67,8 @@ class ShopInfo extends \yii\db\ActiveRecord
         ];
     }
 
-    public function beforeSave($insert){
+    public function beforeSave($insert)
+    {
         if (parent::beforeSave($insert)) {
             $this->user_id = Yii::$app->user->identity->id;
             return true;

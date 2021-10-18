@@ -32,7 +32,12 @@ class SignupForm extends Model
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Этот адрес электронной почты уже занят.'],
+            [
+                'email',
+                'unique',
+                'targetClass' => '\common\models\User',
+                'message' => 'Этот адрес электронной почты уже занят.'
+            ],
 
             ['password', 'required'],
             ['password', 'string', 'min' => Yii::$app->params['user.passwordMinLength']],
@@ -49,7 +54,7 @@ class SignupForm extends Model
         if (!$this->validate()) {
             return null;
         }
-        
+
         $user = new User();
         $user->username = $this->username;
         $user->email = $this->email;
@@ -57,8 +62,7 @@ class SignupForm extends Model
         $user->generateAuthKey();
         $user->status = self::STATUS_ACTIVE;//актив
         $user->generateEmailVerificationToken();
-        if ($user->save())
-        {
+        if ($user->save()) {
             $r = new DbManager();
             $r->init();
             $assign = $r->createRole('user');
@@ -72,11 +76,10 @@ class SignupForm extends Model
                     '<p>Здравствуйте, ' . $user->username .
                     '!</p><p>Вы были зарегистрированы в программе. 
                     <p>Логин: ' . $this->username . ' </p> 
-                    <p>Пароль: ' . $this->password . ' </p>');
+                    <p>Пароль: ' . $this->password . ' </p>'
+                );
             return $message->send();
-        }
-        else
-        {
+        } else {
             return null;
         }
     }

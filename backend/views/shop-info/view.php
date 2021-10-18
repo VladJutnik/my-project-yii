@@ -11,6 +11,7 @@ $this->title = $model->name;
 
 \yii\web\YiiAsset::register($this);
 ?>
+
 <div class="shop-info-view">
     <div class="container-fluid">
         <div class="card radius-15">
@@ -22,10 +23,19 @@ $this->title = $model->name;
                         <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
                             'class' => 'btn btn-danger',
                             'data' => [
-                                'confirm' => 'Вы действительно хотите удалить магазин: '.$model->name.'?',
+                                'confirm' => 'Вы действительно хотите удалить магазин: ' . $model->name . '?',
                                 'method' => 'post',
                             ],
                         ]) ?>
+                        <?= Html::a(
+                            '<span class="lni lni-plus"></span> Добавить статистические данные',
+                            ['shop-statistics/create?id=' . $model->id],
+                            [
+                                'title' => Yii::t('yii', 'Добавить статистические данные'),
+                                'data-toggle' => 'tooltip',
+                                'class' => 'btn btn-outline-primary'
+                            ]
+                        ); ?>
                     </p>
                 </div>
                 <hr/>
@@ -47,13 +57,15 @@ $this->title = $model->name;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'options' => [
-                        'class' => 'menus-table table-responsive'],
+                        'class' => 'menus-table table-responsive'
+                    ],
                     'tableOptions' => [
                         'class' => 'table table-bordered table-responsive'
                     ],
                     'rowOptions' => ['class' => 'grid_table_tr'],
                     'columns' => [
-                        ['class' => 'yii\grid\SerialColumn',
+                        [
+                            'class' => 'yii\grid\SerialColumn',
                             'headerOptions' => ['class' => 'grid_table_th'],
                         ],
                         [
@@ -61,30 +73,45 @@ $this->title = $model->name;
                             'class' => 'yii\grid\ActionColumn',
                             'options' => ['style' => 'width: 165px; max-width: 165px;'],
                             'template' => '{view} {update} {delete}</div>',
-                            'contentOptions' => ['class' => 'action-column text-center', 'style' => 'width: 165px; max-width: 165px;'],
+                            'contentOptions' => [
+                                'class' => 'action-column text-center',
+                                'style' => 'width: 165px; max-width: 165px;'
+                            ],
                             'buttons' => [
 
                                 'view' => function ($url, $model, $key) {
-                                    return Html::a('<span class="lni lni-magnifier"></span>', ['shop-statistics/view?id=' . $model->id], [
-                                        'title' => Yii::t('yii', 'Посмотреть'),
-                                        'data-toggle' => 'tooltip',
-                                        'class' => 'btn btn-outline-primary'
-                                    ]);
+                                    return Html::a(
+                                        '<span class="lni lni-magnifier"></span>',
+                                        ['shop-statistics/view?id=' . $model->id],
+                                        [
+                                            'title' => Yii::t('yii', 'Посмотреть'),
+                                            'data-toggle' => 'tooltip',
+                                            'class' => 'btn btn-outline-primary'
+                                        ]
+                                    );
                                 },
                                 'update' => function ($url, $model, $key) {
-                                    return Html::a('<span class="lni lni-pencil-alt"></span>', ['shop-statistics/update?id=' . $model->id], [
-                                        'title' => Yii::t('yii', 'Редактировать'),
-                                        'data-toggle' => 'tooltip',
-                                        'class' => 'btn btn-outline-primary'
-                                    ]);
+                                    return Html::a(
+                                        '<span class="lni lni-pencil-alt"></span>',
+                                        ['shop-statistics/update?id=' . $model->id],
+                                        [
+                                            'title' => Yii::t('yii', 'Редактировать'),
+                                            'data-toggle' => 'tooltip',
+                                            'class' => 'btn btn-outline-primary'
+                                        ]
+                                    );
                                 },
                                 'delete' => function ($url, $model, $key) {
-                                    return Html::a('<span class="lni lni-trash"></span>', ['shop-statistics/delete?id=' . $model->id], [
-                                        'title' => Yii::t('yii', 'Удалить'),
-                                        'data-toggle' => 'tooltip',
-                                        'class' => 'btn btn-outline-danger',
-                                        'data' => ['confirm' => 'Вы уверены что хотите удалить?'],
-                                    ]);
+                                    return Html::a(
+                                        '<span class="lni lni-trash"></span>',
+                                        ['shop-statistics/delete?id=' . $model->id],
+                                        [
+                                            'title' => Yii::t('yii', 'Удалить'),
+                                            'data-toggle' => 'tooltip',
+                                            'class' => 'btn btn-outline-danger',
+                                            'data' => ['confirm' => 'Вы уверены что хотите удалить?'],
+                                        ]
+                                    );
                                 },
                             ],
                         ],
@@ -102,7 +129,7 @@ $this->title = $model->name;
                             'value' => function ($model) {
                                 return Yii::$app->myComponent->dateStr($model->data);
                             },
-                            'filterInputOptions' => ['type' => 'date', 'class' => 'form-control', 'value' => ''],
+                            'filterInputOptions' => ['type' => 'date', 'class' => 'form-control'],
                         ],
                         [
                             'attribute' => 'type_case',

@@ -33,7 +33,13 @@ class Category extends \yii\db\ActiveRecord
             [['name'], 'required'],
             [['user_id', 'status_view'], 'integer'],
             [['name'], 'string', 'max' => 255],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [
+                ['user_id'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => User::className(),
+                'targetAttribute' => ['user_id' => 'id']
+            ],
         ];
     }
 
@@ -50,7 +56,8 @@ class Category extends \yii\db\ActiveRecord
         ];
     }
 
-    public function beforeSave($insert){
+    public function beforeSave($insert)
+    {
         if (parent::beforeSave($insert)) {
             $this->user_id = Yii::$app->user->identity->id;
             return true;

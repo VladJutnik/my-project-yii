@@ -25,7 +25,7 @@ class ShopStatisticsSearch extends ShopStatistics
     }
 
 
-    public function search($params,$id)
+    public function search($params, $id)
     {
         $query = ShopStatistics::find()->where(['shop_id' => $id]);
 
@@ -49,19 +49,18 @@ class ShopStatisticsSearch extends ShopStatistics
                 'pageSize' => 25
             ]
         ]);
-        if($this->data == ''){
+        if ($this->data == '') {
             $query->andFilterWhere(['=', 'category_id', $this->category_id])
                 ->andFilterWhere(['=', 'type_case', $this->type_case]);
-        }else{
+        } else {
             $query->andFilterWhere(['=', 'category_id', $this->category_id])
                 ->andFilterWhere(['=', 'data', Yii::$app->myComponent->dateStrBack($this->data)])
                 ->andFilterWhere(['=', 'type_case', $this->type_case]);
         }
 
 
-
-       /* $query->andFilterWhere(['like', 'fio', $this->fio])
-            ->andFilterWhere(['=', 'organization_id', $this->organization_id]);*/
+        /* $query->andFilterWhere(['like', 'fio', $this->fio])
+             ->andFilterWhere(['=', 'organization_id', $this->organization_id]);*/
 
         return $dataProvider;
     }

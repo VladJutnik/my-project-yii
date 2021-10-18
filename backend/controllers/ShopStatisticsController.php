@@ -29,17 +29,33 @@ class ShopStatisticsController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'list'],
+                        'actions' => [
+                            'index',
+                            'view',
+                            'create',
+                            'update',
+                            'delete',
+                            'list'
+                        ],
                         'allow' => true,
-                        'roles' => ['admin', 'user'],
+                        'roles' => [
+                            'admin',
+                            'user'
+                        ],
                         'denyCallback' => function () {
-                            Yii::$app->session->setFlash("error", "У Вас нет доступа к этой страницы, пожалуйста, обратитесь к администратору!");
+                            Yii::$app->session->setFlash(
+                                "error",
+                                "У Вас нет доступа к этой страницы, пожалуйста, обратитесь к администратору!"
+                            );
                             return $this->redirect(Yii::$app->request->referrer);
                         }
                     ],
                 ],
                 'denyCallback' => function ($rule, $action) {
-                    Yii::$app->session->setFlash("error", "У Вас нет доступа к этой страницы, пожалуйста, обратитесь к администратору!");
+                    Yii::$app->session->setFlash(
+                        "error",
+                        "У Вас нет доступа к этой страницы, пожалуйста, обратитесь к администратору!"
+                    );
                     return $this->redirect(Yii::$app->request->referrer);
                 }
             ],
@@ -77,7 +93,6 @@ class ShopStatisticsController extends Controller
      */
     public function actionView($id)
     {
-
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -98,10 +113,8 @@ class ShopStatisticsController extends Controller
         $shop_items = ArrayHelper::merge($shop_null, $shop_items);
 
         if ($this->request->isPost) {
-           /* print_r($this->request->post());
-            exit();*/
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['shop-info/index']);
             }
         } else {
             $model->loadDefaultValues();
@@ -114,7 +127,8 @@ class ShopStatisticsController extends Controller
         ]);
     }
 
-    public function actionList($q = null, $id = null) {
+    public function actionList($q = null, $id = null)
+    {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $out = ['results' => ['id' => '', 'text' => '']];
         if (!is_null($q)) {
@@ -126,8 +140,7 @@ class ShopStatisticsController extends Controller
             $command = $query->createCommand();
             $data = $command->queryAll();
             $out['results'] = array_values($data);
-        }
-        elseif ($id > 0) {
+        } elseif ($id > 0) {
             $out['results'] = ['id' => $id, 'text' => Category::find($id)->name];
         }
         return $out;
@@ -146,14 +159,11 @@ class ShopStatisticsController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['shop-info/index']);
             }
         } else {
             $model->loadDefaultValues();
         }
-        /*if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }*/
 
         return $this->render('update', [
             'model' => $model,

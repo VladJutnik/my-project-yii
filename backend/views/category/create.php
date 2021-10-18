@@ -7,6 +7,7 @@ use yii\helpers\Html;
 
 $this->title = 'Добавление новой категории';
 ?>
+
 <div class="category-create">
     <div class="container">
         <div class="card radius-15">

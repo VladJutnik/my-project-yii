@@ -4,13 +4,13 @@ use yii\web\JsExpression;
 use kartik\select2\Select2;
 use yii\bootstrap4\ActiveForm;
 use yii\bootstrap4\Html;
-/*print_r(Yii::$app->params['bsVersion']);
-print_r(11111);*/
+
 ?>
 
 <div class="shop-statistics-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php
+    $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'shop_id')
         ->widget(
@@ -22,12 +22,14 @@ print_r(11111);*/
                     'options' => [$id => ['Selected' => true]],
                 ],
                 'pluginOptions' => ['allowClear' => true]
-            ])?>
+            ]
+        ) ?>
 
-    <?$url = \yii\helpers\Url::to(['list']);?>
+    <?
+    $url = \yii\helpers\Url::to(['list']); ?>
     <?=
     $form->field($model, 'category_id')->widget(Select2::classname(), [
-        'options' => ['value' => $value, 'placeholder' => 'поиск ...' ],
+        'options' => ['value' => $value, 'placeholder' => 'поиск ...'],
         'pluginOptions' => [
             'theme' => true,
             'allowClear' => true,
@@ -58,6 +60,7 @@ print_r(11111);*/
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-outline-primary mt-3 px-5 radius-30 btn-block']) ?>
     </div>
 
-    <?php ActiveForm::end(); ?>
+    <?php
+    ActiveForm::end(); ?>
 
 </div>

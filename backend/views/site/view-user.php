@@ -3,12 +3,12 @@
 use yii\grid\GridView;
 use yii\helpers\Html;
 
-
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Просмотр магизинов пользователя:';
 ?>
+
 <div class="category-index">
     <div class="card radius-15">
         <div class="card-body">
@@ -22,7 +22,6 @@ $this->title = 'Просмотр магизинов пользователя:';
                 'dataProvider' => $dataProvider,
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
-
                     [
                         'attribute' => 'user_id',
                         'value' => function ($model) {
@@ -37,11 +36,15 @@ $this->title = 'Просмотр магизинов пользователя:';
                         'contentOptions' => ['class' => 'action-column text-center'],
                         'buttons' => [
                             'view' => function ($url, $model, $key) {
-                                return Html::a('<span class="lni lni-magnifier"></span>', ['shop-info/view?id=' . $model->id], [
-                                    'title' => Yii::t('yii', 'Посмотреть'),
-                                    'data-toggle' => 'tooltip',
-                                    'class' => 'btn btn-outline-primary'
-                                ]);
+                                return Html::a(
+                                    '<span class="lni lni-magnifier"></span>',
+                                    ['shop-info/view?id=' . $model->id],
+                                    [
+                                        'title' => Yii::t('yii', 'Посмотреть'),
+                                        'data-toggle' => 'tooltip',
+                                        'class' => 'btn btn-outline-primary'
+                                    ]
+                                );
                             },
                         ],
                     ],

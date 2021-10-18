@@ -20,7 +20,7 @@ $this->title = $model->name;
                         <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
                             'class' => 'btn btn-danger',
                             'data' => [
-                                'confirm' => 'Вы действительно хотите удалить категорию: '.$model->name.'?',
+                                'confirm' => 'Вы действительно хотите удалить категорию: ' . $model->name . '?',
                                 'method' => 'post',
                             ],
                         ]) ?>

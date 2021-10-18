@@ -11,6 +11,7 @@ use yii\bootstrap4\Html;
 
 $this->title = 'Загрузка через cvs';
 ?>
+
 <div class="shop-statistics-update">
     <div class="category-update">
         <div class="container">
@@ -20,25 +21,33 @@ $this->title = 'Загрузка через cvs';
                         <h1><?= Html::encode($this->title) ?></h1>
                     </div>
                     <hr/>
-                    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
+                    <?php
+                    $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
 
                     <?= $form->field($model, 'name')
                         ->widget(
                             Select2::classname(),
-                            ['data' => $shop_items,
-                                'options' => ['placeholder' => 'Не указан',
+                            [
+                                'data' => $shop_items,
+                                'options' => [
+                                    'placeholder' => 'Не указан',
                                     'allowClear' => true,
                                 ],
                                 'pluginOptions' => ['allowClear' => true]
-                            ])->label('Выберете организацию') ?>
+                            ]
+                        )->label('Выберете организацию') ?>
 
                     <?= $form->field($model, 'file')->fileInput(['accept' => '.csv'])->label(false) ?>
 
                     <div class="form-group">
-                        <?= Html::submitButton('Загрузить', ['class' => 'btn btn-outline-primary mt-3 px-5 radius-30 btn-block']) ?>
+                        <?= Html::submitButton(
+                            'Загрузить',
+                            ['class' => 'btn btn-outline-primary mt-3 px-5 radius-30 btn-block']
+                        ) ?>
                     </div>
 
-                    <?php ActiveForm::end(); ?>
+                    <?php
+                    ActiveForm::end(); ?>
                 </div>
             </div>
         </div>

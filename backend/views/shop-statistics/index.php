@@ -7,8 +7,8 @@ use yii\grid\GridView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Shop Statistics';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
+
 <div class="shop-statistics-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
@@ -16,7 +16,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Create Shop Statistics', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

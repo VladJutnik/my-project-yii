@@ -10,6 +10,7 @@ $this->title = Yii::$app->myComponent->dateStr($model->data);
 
 \yii\web\YiiAsset::register($this);
 ?>
+
 <div class="shop-statistics-view">
     <div class="container">
         <div class="card radius-15">
@@ -21,7 +22,7 @@ $this->title = Yii::$app->myComponent->dateStr($model->data);
                         <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
                             'class' => 'btn btn-danger',
                             'data' => [
-                                'confirm' => 'Вы действительно хотите удалить категорию: ' .  $model->data . '?',
+                                'confirm' => 'Вы действительно хотите удалить категорию: ' . $model->data . '?',
                                 'method' => 'post',
                             ],
                         ]) ?>

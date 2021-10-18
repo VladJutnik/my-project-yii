@@ -9,14 +9,20 @@ use yii\grid\GridView;
 
 $this->title = 'Список магазинов';
 ?>
+
 <div class="shop-info-index">
     <div class="card radius-15">
         <div class="card-body">
             <div class="card-title">
                 <div class="row">
                     <h4 class="mb-0 mt-2 ml-3"><?= Html::encode($this->title) ?></h4>
-                    <?= Html::a('Добавить новый магазин', ['create'], ['class' => 'btn btn-primary ml-3 px-5 btn-sm']) ?>
-                    <?= Html::a('Добавить статистику по магазину', ['shop-statistics/create'], ['class' => 'btn btn-primary ml-3 px-5 btn-sm']) ?>
+                    <?= Html::a('Добавить новый магазин', ['create'], ['class' => 'btn btn-primary ml-3 px-5 btn-sm']
+                    ) ?>
+                    <?= Html::a(
+                        'Добавить статистику по магазину',
+                        ['shop-statistics/create'],
+                        ['class' => 'btn btn-primary ml-3 px-5 btn-sm']
+                    ) ?>
                 </div>
             </div>
             <hr/>
@@ -40,38 +46,38 @@ $this->title = 'Список магазинов';
                         'contentOptions' => ['class' => 'action-column text-center'],
                         'buttons' => [
                             'onoff' => function ($url, $model, $key) {
-                               /* if ($model->status_view == 0 || $model->status_view == '')
-                                {
-                                    $value = 0;
-                                }
-                                else
-                                {
-                                    $value = 1;
-                                }
-                                return SwitchInput::widget(
-                                    [
-                                        'name' => 'status_view',
-                                        'options' => ['data-id' => $model->id],
-                                        'type' => SwitchInput::CHECKBOX,
-                                        'value' => $value,
-                                        'pluginOptions' => [
-                                            'size' => 'mini',
-                                            'animate' => false,
-                                            'onText' => 'Вкл отображение',
-                                            'offText' => 'Выкл отображение'
-                                        ],
-                                        'pluginEvents' => [
-                                            "switchChange.bootstrapSwitch" => "
-                                                function (event) {
-                                                var status_view = 0; 
-                                                if(jQuery(this).is(':checked')){status_view = 1;} 
-                                                var id = jQuery(this).attr('data-id');
-                                                jQuery.ajax({url:'/organizations/onoff?id='+id+'&status_veiws='+status_veiws,
-                                                success:function(model){console.log(model)}})}
-                                            ",
-                                        ],
-                                    ]
-                                );*/
+                                /* if ($model->status_view == 0 || $model->status_view == '')
+                                 {
+                                     $value = 0;
+                                 }
+                                 else
+                                 {
+                                     $value = 1;
+                                 }
+                                 return SwitchInput::widget(
+                                     [
+                                         'name' => 'status_view',
+                                         'options' => ['data-id' => $model->id],
+                                         'type' => SwitchInput::CHECKBOX,
+                                         'value' => $value,
+                                         'pluginOptions' => [
+                                             'size' => 'mini',
+                                             'animate' => false,
+                                             'onText' => 'Вкл отображение',
+                                             'offText' => 'Выкл отображение'
+                                         ],
+                                         'pluginEvents' => [
+                                             "switchChange.bootstrapSwitch" => "
+                                                 function (event) {
+                                                 var status_view = 0;
+                                                 if(jQuery(this).is(':checked')){status_view = 1;}
+                                                 var id = jQuery(this).attr('data-id');
+                                                 jQuery.ajax({url:'/organizations/onoff?id='+id+'&status_veiws='+status_veiws,
+                                                 success:function(model){console.log(model)}})}
+                                             ",
+                                         ],
+                                     ]
+                                 );*/
                             },
                             'create-statistic' => function ($url, $model, $key) {
                                 /*return
@@ -86,12 +92,16 @@ $this->title = 'Список магазинов';
                                             $("#showModal").modal("show");
                                         });'
                                     ]);*/
-                                return Html::a('<span class="lni lni-plus"></span>', ['shop-statistics/create?id=' . $model->id], [
-                                    //return Html::a('<span class="glyphicon glyphicon-list-alt"></span> Акт', $url, [
-                                    'title' => Yii::t('yii', 'Добавить статистические данные'),
-                                    'data-toggle' => 'tooltip',
-                                    'class' => 'btn btn-outline-primary'
-                                ]);
+                                return Html::a(
+                                    '<span class="lni lni-plus"></span>',
+                                    ['shop-statistics/create?id=' . $model->id],
+                                    [
+                                        //return Html::a('<span class="glyphicon glyphicon-list-alt"></span> Акт', $url, [
+                                        'title' => Yii::t('yii', 'Добавить статистические данные'),
+                                        'data-toggle' => 'tooltip',
+                                        'class' => 'btn btn-outline-primary'
+                                    ]
+                                );
                             },
                             'view' => function ($url, $model, $key) {
                                 return Html::a('<span class="lni lni-magnifier"></span>', $url, [
@@ -127,7 +137,7 @@ $this->title = 'Список магазинов';
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Добавить статистические данные:</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">	<span aria-hidden="true">&times;</span>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body p-0">

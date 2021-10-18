@@ -1,14 +1,17 @@
 <?php
 
 /* @var $this yii\web\View */
+
 /* @var $name string */
 /* @var $message string */
+
 /* @var $exception Exception */
 
 use yii\helpers\Html;
 
 $this->title = $name;
 ?>
+
 <div class="container">
     <div class="card radius-15">
         <div class="card-body">

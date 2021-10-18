@@ -7,6 +7,7 @@ use yii\helpers\Html;
 
 $this->title = 'Редактирование магазина: ' . $model->name;
 ?>
+
 <div class="shop-info-update">
     <div class="container">
         <div class="card radius-15">

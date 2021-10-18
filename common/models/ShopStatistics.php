@@ -39,8 +39,20 @@ class ShopStatistics extends \yii\db\ActiveRecord
             [['type_case'], 'string', 'max' => 50],
             [['description'], 'string', 'max' => 255],
             [['case'], 'integer', 'min' => 0],
-            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
-            [['shop_id'], 'exist', 'skipOnError' => true, 'targetClass' => ShopInfo::className(), 'targetAttribute' => ['shop_id' => 'id']],
+            [
+                ['category_id'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => Category::className(),
+                'targetAttribute' => ['category_id' => 'id']
+            ],
+            [
+                ['shop_id'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => ShopInfo::className(),
+                'targetAttribute' => ['shop_id' => 'id']
+            ],
         ];
     }
 

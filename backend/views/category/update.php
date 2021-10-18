@@ -7,6 +7,7 @@ use yii\helpers\Html;
 
 $this->title = 'Редактирование категории: ' . $model->name;
 ?>
+
 <div class="category-update">
     <div class="container">
         <div class="card radius-15">

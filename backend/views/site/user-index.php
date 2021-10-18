@@ -3,12 +3,12 @@
 use yii\grid\GridView;
 use yii\helpers\Html;
 
-
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Список пользователей';
 ?>
+
 <div class="category-index">
     <div class="card radius-15">
         <div class="card-body">
@@ -39,13 +39,16 @@ $this->title = 'Список пользователей';
                                 ]);
                             },
                             'view-user' => function ($url, $model, $key) {
-                                return Html::a('<span class="lni lni-magnifier "></span>', ['site/view-user?id=' . $model->id], [
-                                    'title' => Yii::t('yii', 'Посмотреть информацию о пользователе'),
-                                    'data-toggle' => 'tooltip',
-                                    'class' => 'btn btn-outline-primary'
-                                ]);
+                                return Html::a(
+                                    '<span class="lni lni-magnifier "></span>',
+                                    ['site/view-user?id=' . $model->id],
+                                    [
+                                        'title' => Yii::t('yii', 'Посмотреть информацию о пользователе'),
+                                        'data-toggle' => 'tooltip',
+                                        'class' => 'btn btn-outline-primary'
+                                    ]
+                                );
                             },
-
                         ],
                     ],
                 ],

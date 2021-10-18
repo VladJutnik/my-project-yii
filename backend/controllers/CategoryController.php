@@ -25,22 +25,35 @@ class CategoryController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['create', 'update', 'delete'],
+                        'actions' => [
+                            'create',
+                            'update',
+                            'delete'
+                        ],
                         'allow' => true,
                         'roles' => ['admin'],
                         'denyCallback' => function () {
-                            Yii::$app->session->setFlash("error", "У Вас нет доступа к этой страницы, пожалуйста, обратитесь к администратору!");
+                            Yii::$app->session->setFlash(
+                                "error",
+                                "У Вас нет доступа к этой страницы, пожалуйста, обратитесь к администратору!"
+                            );
                             return $this->redirect(Yii::$app->request->referrer);
                         }
                     ],
                     [
-                        'actions' => ['index', 'view'],
+                        'actions' => [
+                            'index',
+                            'view'
+                        ],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                 ],
                 'denyCallback' => function ($rule, $action) {
-                    Yii::$app->session->setFlash("error", "У Вас нет доступа к этой страницы, пожалуйста, обратитесь к администратору!");
+                    Yii::$app->session->setFlash(
+                        "error",
+                        "У Вас нет доступа к этой страницы, пожалуйста, обратитесь к администратору!"
+                    );
                     return $this->redirect(Yii::$app->request->referrer);
                 }
             ],
@@ -54,7 +67,7 @@ class CategoryController extends Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Category::find()->where(['status_view'=>0]),
+            'query' => Category::find()->where(['status_view' => 0]),
 
             'pagination' => [
                 'pageSize' => 5
