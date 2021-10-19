@@ -39,8 +39,14 @@ class SiteController extends Controller
                         'actions' => [
                             'logout',
                             'index',
-                            'admins',
                             'subjectslist',
+                        ],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => [
+                            'admins',
                             'user-index',
                             'login-input',
                             'view-user',
@@ -48,7 +54,11 @@ class SiteController extends Controller
                             'simulation-start'
                         ],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['admin'],
+                        'denyCallback' => function () {
+                            Yii::$app->session->setFlash("error", "У Вас нет доступа к этой страницы, пожалуйста, обратитесь к администратору!");
+                            return $this->redirect(Yii::$app->request->referrer);
+                        }
                     ],
                 ],
             ],
@@ -218,7 +228,7 @@ class SiteController extends Controller
             $model->loadDefaultValues();
         }
         if (Yii::$app->user->can('admin')) {
-            return $this->redirect('site/admins');
+             return $this->redirect('admin/site/admins');
         } else {
             return $this->render('index', [
                 'model' => $model,
