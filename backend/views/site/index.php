@@ -10,6 +10,7 @@ use yii\bootstrap4\Html;
 use phpnt\chartJS\ChartJs;
 
 $this->title = 'Пример Backend-а';
+$session = Yii::$app->session;
 ?>
 <div class="site-index">
     <div class="container-fluid">
@@ -29,7 +30,7 @@ $this->title = 'Пример Backend-а';
                             'data' => $shop_items,
                             'options' => [
                                 'placeholder' => 'Выберите или введите...',
-                                'options' => [$_SESSION['name'] => ['Selected' => true]],
+                                'options' => [$session['name'] => ['Selected' => true]],
                             ],
                             'pluginOptions' => ['allowClear' => true]
                         ]
@@ -42,7 +43,7 @@ $this->title = 'Пример Backend-а';
                             'data' => $category_items,
                             'options' => [
                                 'placeholder' => 'Выберите или введите...',
-                                'options' => [$_SESSION['report_category_id'] => ['Selected' => true]],
+                                'options' => [$session['report_category_id'] => ['Selected' => true]],
                             ],
                             'pluginOptions' => ['allowClear' => true]
                         ]
@@ -52,7 +53,7 @@ $this->title = 'Пример Backend-а';
                         'type' => 'date',
                         'maxlength' => true,
                         'class' => 'form-control',
-                        'value' => $_SESSION['report_data']
+                        'value' => $session['report_data']
                     ]
                 ) ?>
                 <div class="form-group">
