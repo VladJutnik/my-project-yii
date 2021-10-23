@@ -42,7 +42,7 @@ $this->title = 'Список магазинов';
                     [
                         'header' => 'Увправление',
                         'class' => 'yii\grid\ActionColumn',
-                        'template' => '{onoff} {create-statistic} {view} {update} {delete}',
+                        'template' => '{onoff} {create-statistic} {view} {print-shop} {update} {delete}',
                         'contentOptions' => ['class' => 'action-column text-center'],
                         'buttons' => [
                             'onoff' => function ($url, $model, $key) {
@@ -113,6 +113,13 @@ $this->title = 'Список магазинов';
                             'update' => function ($url, $model, $key) {
                                 return Html::a('<span class="lni lni-pencil-alt"></span>', $url, [
                                     'title' => Yii::t('yii', 'Редактировать'),
+                                    'data-toggle' => 'tooltip',
+                                    'class' => 'btn btn-outline-primary'
+                                ]);
+                            },
+                            'print-shop' => function ($url, $model, $key) {
+                                return Html::a('<span class="lni lni-printer"></span>', $url, [
+                                    'title' => Yii::t('yii', 'Печать информации'),
                                     'data-toggle' => 'tooltip',
                                     'class' => 'btn btn-outline-primary'
                                 ]);

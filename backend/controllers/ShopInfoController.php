@@ -7,6 +7,7 @@ use common\models\Loading;
 use common\models\ShopInfo;
 use common\models\ShopStatistics;
 use common\models\ShopStatisticsSearch;
+use Mpdf\Mpdf;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
@@ -38,6 +39,7 @@ class ShopInfoController extends Controller
                             'delete',
                             'loading',
                             'create-statistic',
+                            'print-shop',
                             'onoff'
                         ],
                         'allow' => true,
@@ -114,6 +116,77 @@ class ShopInfoController extends Controller
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
+    }
+    //печать
+    public function actionPrintShop($id)
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
+        ini_set('max_execution_time', 3600);
+        ini_set('memory_limit', '5092M');
+        ini_set("pcre.backtrack_limit", "5000000");
+
+        $shop = ShopInfo::findOne($id);
+
+        $html = '
+            <br>
+            <table style="margin-top: -50px; font-size: 12px; margin-right: -60px; width: 300px;">
+                <tr><td style="width: 380px;"><b>Название:</b> ' . $shop->name . '<br></td></tr>
+                <tr><td style="width: 380px;"><b>ИНН:</b> 111222333<br></td></tr>
+                <tr><td style="width: 380px;"><b>Юридический адрес:</b> ул. Героев Революции, 245<br></td></tr>
+                <tr><td style="width: 380px;"><b>Директор:</b> Иванов Ивано Иванович<br></td></tr>
+            </table>';
+        $html .= '   
+            <table style="border-collapse: collapse; font-size: 12px; margin-top: 15px;">
+            <tr>
+                <td style=" padding-right: 15px;">Код ОГРН</td>';
+        for ($i = 1; $i <= 10; $i++) {
+            $html .= '<td style=" border: 1px solid #000000; padding: 5px;">' . $i . '</td>';
+        }
+        $html .= '
+            </tr>
+            </table>';
+        $html .= '
+            <div style="margin-top: 35px; font-size: 14px; margin-right: -30px;" align="center"><b>Данные по магазину</b></div>
+            <div align="center" style="margin-top: 3px; font-size: 11px; margin-right: -30px;"><b><span style="color: blue;"><i>от ' . date(
+                "d.m.Y"
+            ) . ' г.</i></span></b></div>
+            <div style="margin-top: 8px; font-size: 11px; margin-right: -30px;">Список трап:</div>';
+
+        $html .= '
+            <div style="margin-top: 8px; font-size: 11px; margin-right: -30px;">С заключительным актом ознакомлен:</div>
+           
+            <br>  
+            <table style="margin-top: -0px; font-size: 11px; margin-right: -60px;">
+                <tr>
+                    <td align="left"  style="width: 380px;" >
+                        <span style="color: blue;"><span style="color: blue;"><i>______________, ______________</i></span>
+                    </td>
+                
+                    <td align="center"  style="width: 70px;" ></td>
+                   
+                    <td align="center"  style="width: 70px;" >М.П. </td>
+                </tr> 
+                <tr>
+                    <td align="left"  style="width: 380px;" >
+                        <span style="color: blue;"><span style="color: blue;"><i><br><br>Председатель организации: <br>______________, ______________</i></span>
+                    </td>
+                
+                    <td align="center"  style="width: 70px;" ></td>
+                    
+                    <td align="center"  style="width: 70px;" ><br><br><br><br>М.П.</td>
+                </tr>
+            </table>
+            </div>
+        ';
+
+        require_once __DIR__ . '/../../vendor/autoload.php';
+
+        $mpdf = new Mpdf();
+        $mpdf->WriteHTML($html);
+        $mpdf->Output('Данные по магазину: ' . $shop->name . '.pdf', 'D'); //D - скачает файл!
     }
 
     /**
