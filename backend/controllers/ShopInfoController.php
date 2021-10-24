@@ -376,7 +376,7 @@ class ShopInfoController extends Controller
         $mpdf->WriteHTML($html);
         $mpdf->Output('Данные по магазину: ' . $shop->name . '.pdf', 'D'); //D - скачает файл!
     }
-
+    //выгрузка в эксель! с выбором
     public function actionViewExceel()
     {
         if (Yii::$app->user->isGuest) {
@@ -388,7 +388,7 @@ class ShopInfoController extends Controller
         $shop_lists = ShopInfo::find()->where(['user_id' => Yii::$app->user->identity->id])->limit(10)->all();
 
         if (Yii::$app->request->post()) {
-            print_r('1111');
+            print_r(Yii::$app->request->post());
         }
 
 

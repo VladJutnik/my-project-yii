@@ -25,7 +25,6 @@ class ExceelCommon extends Model
     public $shop_9;
     public $shop_10;
 
-
     /**
      * @return array the validation rules.
      */

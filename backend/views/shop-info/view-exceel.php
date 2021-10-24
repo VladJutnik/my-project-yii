@@ -5,30 +5,32 @@ use yii\widgets\ActiveForm;
 
 ?>
 
-<div class="user-create">
-    <div class="row justify-content-center mt-3">
-        <div class="col-md-8">
-            <?php
-            $form = ActiveForm::begin(); ?>
-            <div class="row">
-                <?
-                $num = 1;
-                foreach ($shop_lists as $shop_list):?>
-                    <?= $form->field($model, 'shop_' . $num)
-                        ->checkbox([
-                            'label' => '',
-                            'labelOptions' => [
-                                'style' => 'padding-left:20px;'
-                            ],
-                        ]); ?>
-                    <?= $shop_list->name . '<br><br>'; ?>
-                    <?
-                    $num++;
-                endforeach;
-                ?>
+<?php
+$form = ActiveForm::begin(); ?>
+    <div class="row">
+        <?
+        $num = 1;
+        foreach ($shop_lists as $shop_list):?>
+            <div class="col-3">
+                <?= $form->field($model, 'shop_' . $num)
+                    ->checkbox([
+                        'label' => $shop_list->name,
+                        'labelOptions' => [
+                            'style' => 'padding-left:20px;'
+                        ],
+                    ]); ?>
             </div>
-            <?php
-            ActiveForm::end(); ?>
-        </div>
+            <div class="col-9"></div>
+            <?
+            $num++;
+        endforeach;
+        ?>
     </div>
-</div>
+    <div class="form-group">
+        <?= Html::submitButton(
+            'Выгрузить список в Exceel',
+            ['class' => 'btn btn-outline-primary mt-3 px-5 radius-30 btn-block']
+        ) ?>
+    </div>
+<?php
+ActiveForm::end(); ?>
