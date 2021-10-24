@@ -16,12 +16,25 @@ $this->title = 'Список магазинов';
             <div class="card-title">
                 <div class="row">
                     <h4 class="mb-0 mt-2 ml-3"><?= Html::encode($this->title) ?></h4>
-                    <?= Html::a('Добавить новый магазин', ['create'], ['class' => 'btn btn-primary ml-3 px-5 btn-sm']
+                    <?= Html::a('Добавить новый магазин', ['create'], ['class' => 'btn btn-primary ml-3 m-1 px-5 btn-sm']
                     ) ?>
                     <?= Html::a(
                         'Добавить статистику по магазину',
                         ['shop-statistics/create'],
-                        ['class' => 'btn btn-primary ml-3 px-5 btn-sm']
+                        ['class' => 'btn btn-primary ml-3 m-1 px-5 btn-sm']
+                    ) ?>
+
+                    <?= Html::button(
+                        'Распечатать результат по магазинам',
+                        [
+                            'class' => 'btn btn-primary ml-3 m-1 px-5 btn-sm',
+                            'onclick' => '
+                                $.get("view-exceel", function(data){
+                                $("#showModalExceel .modal-body").empty();
+                                $("#showModalExceel .modal-body").append(data);
+                                $("#showModalExceel").modal("show");
+                            });'
+                        ]
                     ) ?>
                 </div>
             </div>
@@ -148,6 +161,21 @@ $this->title = 'Список магазинов';
                 </button>
             </div>
             <div class="modal-body p-0">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div id="showModalExceel" class="modal fade">
+    <div class="modal-dialog modal-lg" style="">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Сформировать данные по магазинам</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
 
             </div>
         </div>
