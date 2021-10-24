@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use common\models\Category;
+use common\models\ExceelCommon;
 use common\models\Loading;
 use common\models\ShopInfo;
 use common\models\ShopStatistics;
@@ -40,6 +41,7 @@ class ShopInfoController extends Controller
                             'loading',
                             'create-statistic',
                             'print-shop',
+                            'view-exceel',
                             'onoff'
                         ],
                         'allow' => true,
@@ -117,6 +119,7 @@ class ShopInfoController extends Controller
             'searchModel' => $searchModel,
         ]);
     }
+
     //печать
     public function actionPrintShop($id)
     {
@@ -246,7 +249,9 @@ class ShopInfoController extends Controller
             $html .= ' 
                 <tr>
                     <td align="center" style="width: 120px"><i><span style="color: blue;">' . $num++ . '</i></span></td>
-                    <td align="center" style="width: 120px"><i><span style="color: blue;">' . Yii::$app->myComponent->dateStr($key) . '</i></span></td>
+                    <td align="center" style="width: 120px"><i><span style="color: blue;">' . Yii::$app->myComponent->dateStr(
+                    $key
+                ) . '</i></span></td>
                     <td align="center" style="width: 120px"><i><span style="color: blue;">' . $balanc . '</i></span></td>    
                 </tr>';
         endforeach;
@@ -271,7 +276,9 @@ class ShopInfoController extends Controller
             $html .= ' 
                 <tr>
                     <td align="center" style="width: 120px"><i><span style="color: blue;">' . $num++ . '</i></span></td>
-                    <td align="center" style="width: 120px"><i><span style="color: blue;">' . Yii::$app->myComponent->dateStr($key) . '</i></span></td>
+                    <td align="center" style="width: 120px"><i><span style="color: blue;">' . Yii::$app->myComponent->dateStr(
+                    $key
+                ) . '</i></span></td>
                     <td align="center" style="width: 120px"><i><span style="color: blue;">Приход</i></span></td>    
                     <td align="center" style="width: 120px"><i><span style="color: blue;">' . $enrollment_one . '</i></span></td>    
                 </tr>';
@@ -297,7 +304,9 @@ class ShopInfoController extends Controller
             $html .= ' 
                 <tr>
                     <td align="center" style="width: 120px"><i><span style="color: blue;">' . $num++ . '</i></span></td>
-                    <td align="center" style="width: 120px"><i><span style="color: blue;">' . Yii::$app->myComponent->dateStr($key) . '</i></span></td>
+                    <td align="center" style="width: 120px"><i><span style="color: blue;">' . Yii::$app->myComponent->dateStr(
+                    $key
+                ) . '</i></span></td>
                     <td align="center" style="width: 120px"><i><span style="color: blue;">Расход</i></span></td>    
                     <td align="center" style="width: 120px"><i><span style="color: blue;">' . $outlay_one . '</i></span></td>    
                 </tr>';
@@ -366,6 +375,27 @@ class ShopInfoController extends Controller
         ]);
         $mpdf->WriteHTML($html);
         $mpdf->Output('Данные по магазину: ' . $shop->name . '.pdf', 'D'); //D - скачает файл!
+    }
+
+    public function actionViewExceel()
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+        $this->layout = false;
+
+        $model = new ExceelCommon();
+        $shop_lists = ShopInfo::find()->where(['user_id' => Yii::$app->user->identity->id])->limit(10)->all();
+
+        if (Yii::$app->request->post()) {
+            print_r('1111');
+        }
+
+
+        return $this->render('view-exceel', [
+            'model' => $model,
+            'shop_lists' => $shop_lists,
+        ]);
     }
 
     /**
