@@ -127,8 +127,82 @@ class ShopInfoController extends Controller
         ini_set('max_execution_time', 3600);
         ini_set('memory_limit', '5092M');
         ini_set("pcre.backtrack_limit", "5000000");
-
+        $where_sum_enrollment = [
+            'shop_id' => $id,
+            'type_case' => 'enrollment'
+        ];
+        $where_sum_outlay = [
+            'shop_id' => $id,
+            'type_case' => 'outlay'
+        ];
         $shop = ShopInfo::findOne($id);
+        $sum_enrollment = ShopStatistics::find()->select(['shop_id', 'type_case', 'SUM(`case`) as cost',])->where(
+            $where_sum_enrollment
+        )->asArray()->one();//приход
+        $sum_outlay = ShopStatistics::find()->select(['shop_id', 'type_case', 'SUM(`case`) as cost',])->where(
+            $where_sum_outlay
+        )->asArray()->one();//расход
+        $statistics = ShopInfo::find()->
+        select([
+            'shop_info.name as name',
+            'shop_statistics.`case` as cost',
+            'shop_statistics.`type_case` as type',
+            'shop_statistics.`data` as data',
+            'category.`name` as category_name',
+        ])->
+        leftJoin('shop_statistics', 'shop_info.id = shop_statistics.shop_id')->
+        leftJoin('category', 'category.id = shop_statistics.category_id')->
+        where(['shop_info.user_id' => Yii::$app->user->identity->id])
+            ->andWhere(['shop_id' => $id])
+            ->orderBy(['shop_statistics.data' => SORT_ASC])
+            ->asArray()
+            ->all();
+        //SELECT
+        //shop . name,
+        //statistics . `case` as `cost`,
+        //statistics . `type_case` as `type`,
+        //statistics . data as `data`,
+        //category . `name` as `category`
+        //FROM `shop_info`as shop
+        //LEFT JOIN `shop_statistics` as statistics ON(shop . id = statistics . `shop_id`)
+        //LEFT JOIN `category` as category ON(category . id = statistics . `category_id`)
+        //WHERE shop . user_id = 1
+
+        $category_outlay = []; //категории которые мы расходуем в магазине
+        $enrollment = []; //приход на счет
+        $outlay = []; //расход со счета
+        $data = []; //сумма расхода
+        $result_balance = []; //баланс на день
+        $category_top = [];//топ трат по категориям
+        $balance = 0;
+        foreach ($statistics as $statistic):
+            $data[$statistic['data']] = $statistic['data'];
+            if ($statistic['type'] == 'outlay') {
+                $outlay[$statistic['data']] += $statistic['cost'];
+                $category_outlay[$statistic['category_name']] += 1;
+                $category_top[] = [
+                    $statistic['name'],
+                    $statistic['cost'],
+                    $statistic['category_name'],
+                    $statistic['data']
+                ];
+            } else {
+                $enrollment[$statistic['data']] += $statistic['cost'];
+            }
+        endforeach;
+        $data = array_values($data);
+        //буду искать значения в массивах прихода и расхода, для расчета остатка денег на счету за дату!
+        foreach ($data as $data_one):
+            //расчитываем баланс на чсисло для графика
+            if ($outlay[$data_one]) {
+                $balance = $balance - $outlay[$data_one];
+            }
+            if ($enrollment[$data_one]) {
+                $balance = $balance + $enrollment[$data_one];
+            }
+            //посчитали баланс на дату после сложения и вычитания
+            $result_balance[$data_one] = $balance;
+        endforeach;
         // <table style="margin-top: -50px; font-size: 12px; margin-right: -60px; width: 300px;">
         $html = '
             <table style="font-size: 12px; width: 300px;">
@@ -148,14 +222,114 @@ class ShopInfoController extends Controller
             </tr>
             </table>';
         $html .= '
-            <div style="margin-top: 35px; font-size: 14px; margin-right: -30px;" align="center"><b>Данные по магазину</b></div>
+            <div style="margin-top: 35px; font-size: 14px; margin-right: -30px;" align="center"><b>Данные по магазину "' . $shop->name . '"</b></div>
             <div align="center" style="margin-top: 3px; font-size: 11px; margin-right: -30px;"><b><span style="color: blue;"><i>от ' . date(
                 "d.m.Y"
-            ) . ' г.</i></span></b></div>
-            <div style="margin-top: 8px; font-size: 11px; margin-right: -30px;">Список трап:</div>';
+            ) . ' г.</i></span></b></div>';
 
         $html .= '
-            <div style="margin-top: 8px; font-size: 11px; margin-right: -30px;">С заключительным актом ознакомлен:</div>
+            <table border="1" align="left" style="
+                border-collapse: collapse; /*убираем пустые промежутки между ячейками*/
+                border: 1px solid #000000; /*устанавливаем для таблицы внешнюю границу серого цвета толщиной 1px*/
+                font-size: 12px;
+                margin-top: 15px;">
+                <tr>
+                    <td align="center" style="width: 180px" colspan="3"><b>Баланс на дату:</b></td>
+                </tr>
+                <tr>
+                    <td align="center" ><b>#</b></td>
+                    <td align="center" ><b>Дата</b></td>
+                    <td align="center" ><b>Актуальный баланс на дату</b></td>
+                </tr>';
+        $num = 1;
+        foreach ($result_balance as $key => $balanc):
+            $html .= ' 
+                <tr>
+                    <td align="center" style="width: 120px"><i><span style="color: blue;">' . $num++ . '</i></span></td>
+                    <td align="center" style="width: 120px"><i><span style="color: blue;">' . Yii::$app->myComponent->dateStr($key) . '</i></span></td>
+                    <td align="center" style="width: 120px"><i><span style="color: blue;">' . $balanc . '</i></span></td>    
+                </tr>';
+        endforeach;
+        $html .= '</table>';
+        $html .= '
+            <table border="1" align="left" style="
+                border-collapse: collapse; /*убираем пустые промежутки между ячейками*/
+                border: 1px solid #000000; /*устанавливаем для таблицы внешнюю границу серого цвета толщиной 1px*/
+                font-size: 12px;
+                margin-top: 15px;">
+                <tr>
+                    <td align="center" style="width: 180px" colspan="4"><b>Список прихода:</b></td>
+                </tr>
+                <tr>
+                    <td align="center" ><b>#</b></td>
+                    <td align="center" ><b>Дата</b></td>
+                    <td align="center" ><b>Тип</b></td>
+                    <td align="center" ><b>Сумма</b></td>
+                </tr>';
+        $num = 1;
+        foreach ($enrollment as $key => $enrollment_one):
+            $html .= ' 
+                <tr>
+                    <td align="center" style="width: 120px"><i><span style="color: blue;">' . $num++ . '</i></span></td>
+                    <td align="center" style="width: 120px"><i><span style="color: blue;">' . Yii::$app->myComponent->dateStr($key) . '</i></span></td>
+                    <td align="center" style="width: 120px"><i><span style="color: blue;">Приход</i></span></td>    
+                    <td align="center" style="width: 120px"><i><span style="color: blue;">' . $enrollment_one . '</i></span></td>    
+                </tr>';
+        endforeach;
+        $html .= '</table>';
+        $html .= '
+            <table border="1" align="left" style="
+                border-collapse: collapse; /*убираем пустые промежутки между ячейками*/
+                border: 1px solid #000000; /*устанавливаем для таблицы внешнюю границу серого цвета толщиной 1px*/
+                font-size: 12px;
+                margin-top: 15px;">
+                <tr>
+                    <td align="center" style="width: 180px" colspan="4"><b>Список расхода:</b></td>
+                </tr>
+                <tr>
+                    <td align="center" ><b>#</b></td>
+                    <td align="center" ><b>Дата</b></td>
+                    <td align="center" ><b>Тип</b></td>
+                    <td align="center" ><b>Сумма</b></td>
+                </tr>';
+        $num = 1;
+        foreach ($outlay as $key => $outlay_one):
+            $html .= ' 
+                <tr>
+                    <td align="center" style="width: 120px"><i><span style="color: blue;">' . $num++ . '</i></span></td>
+                    <td align="center" style="width: 120px"><i><span style="color: blue;">' . Yii::$app->myComponent->dateStr($key) . '</i></span></td>
+                    <td align="center" style="width: 120px"><i><span style="color: blue;">Расход</i></span></td>    
+                    <td align="center" style="width: 120px"><i><span style="color: blue;">' . $outlay_one . '</i></span></td>    
+                </tr>';
+        endforeach;
+        $html .= '</table>';
+        $html .= '
+            <table border="1" align="left" style="
+                border-collapse: collapse; /*убираем пустые промежутки между ячейками*/
+                border: 1px solid #000000; /*устанавливаем для таблицы внешнюю границу серого цвета толщиной 1px*/
+                font-size: 12px;
+                margin-top: 15px;">
+                <tr>
+                    <td align="center" style="width: 180px" colspan="3"><b>Список категорий по которым идут траты:</b></td>
+                </tr>
+                <tr>
+                    <td align="center" ><b>#</b></td>
+                    <td align="center" ><b>Категория</b></td>
+                    <td align="center" ><b>Количество</b></td>
+                </tr>';
+        $num = 1;
+        foreach ($category_outlay as $key => $category):
+            $html .= ' 
+                <tr>
+                    <td align="center" style="width: 120px"><i><span style="color: blue;">' . $num++ . '</i></span></td>
+                    <td align="center" style="width: 120px"><i><span style="color: blue;">' . $key . '</i></span></td>
+                    <td align="center" style="width: 120px"><i><span style="color: blue;">' . $category . '</i></span></td>    
+                </tr>';
+        endforeach;
+        $html .= '</table>';
+
+        $html .= '
+            <div style="margin-top: 8px; font-size: 11px; margin-right: -30px;">С данными ознакомлен:</div>
            
             <br>  
             <table style="margin-top: -0px; font-size: 11px; margin-right: -60px;">
@@ -187,7 +361,8 @@ class ShopInfoController extends Controller
             'margin_top' => 5,
             'margin_left' => 20,
             'margin_right' => 10,
-            'mirrorMargins' => true //Установлено значение 1, в документе будут отображаться значения левого и правого полей на нечетных и четных страницах, т. е. они станут внутренними и внешними полями.
+            'mirrorMargins' => true
+            //Установлено значение 1, в документе будут отображаться значения левого и правого полей на нечетных и четных страницах, т. е. они станут внутренними и внешними полями.
         ]);
         $mpdf->WriteHTML($html);
         $mpdf->Output('Данные по магазину: ' . $shop->name . '.pdf', 'D'); //D - скачает файл!
