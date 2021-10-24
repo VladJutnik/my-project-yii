@@ -129,10 +129,9 @@ class ShopInfoController extends Controller
         ini_set("pcre.backtrack_limit", "5000000");
 
         $shop = ShopInfo::findOne($id);
-
+        // <table style="margin-top: -50px; font-size: 12px; margin-right: -60px; width: 300px;">
         $html = '
-            <br>
-            <table style="margin-top: -50px; font-size: 12px; margin-right: -60px; width: 300px;">
+            <table style="font-size: 12px; width: 300px;">
                 <tr><td style="width: 380px;"><b>Название:</b> ' . $shop->name . '<br></td></tr>
                 <tr><td style="width: 380px;"><b>ИНН:</b> 111222333<br></td></tr>
                 <tr><td style="width: 380px;"><b>Юридический адрес:</b> ул. Героев Революции, 245<br></td></tr>
@@ -184,7 +183,12 @@ class ShopInfoController extends Controller
 
         require_once __DIR__ . '/../../vendor/autoload.php';
 
-        $mpdf = new Mpdf();
+        $mpdf = new Mpdf([
+            'margin_top' => 5,
+            'margin_left' => 20,
+            'margin_right' => 10,
+            'mirrorMargins' => true //Установлено значение 1, в документе будут отображаться значения левого и правого полей на нечетных и четных страницах, т. е. они станут внутренними и внешними полями.
+        ]);
         $mpdf->WriteHTML($html);
         $mpdf->Output('Данные по магазину: ' . $shop->name . '.pdf', 'D'); //D - скачает файл!
     }
