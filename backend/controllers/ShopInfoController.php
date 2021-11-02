@@ -49,13 +49,6 @@ class ShopInfoController extends Controller
                             'admin',
                             'user'
                         ],
-                        'denyCallback' => function () {
-                            Yii::$app->session->setFlash(
-                                "error",
-                                "У Вас нет доступа к этой страницы, пожалуйста, обратитесь к администратору!"
-                            );
-                            return $this->redirect(Yii::$app->request->referrer);
-                        }
                     ],
                 ],
                 'denyCallback' => function ($rule, $action) {

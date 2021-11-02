@@ -96,7 +96,7 @@ class SiteController extends Controller
         $session['name'] = '';
         $session['report_category_id'] = '';
         $session['report_data'] = '';
-        $shop_null = array('' => 'Выберите ...');
+        $shop_null = ['' => 'Выберите ...'];
         $shop = ShopInfo::find()->where(['user_id' => Yii::$app->user->identity->id, 'status_view' => '0'])->all();
         $shop_items = ArrayHelper::map($shop, 'id', 'name');
         $shop_items = ArrayHelper::merge($shop_null, $shop_items);
@@ -104,7 +104,11 @@ class SiteController extends Controller
         $category = Category::find()->where(['status_view' => '0'])->all();
         $category_items = ArrayHelper::map($category, 'id', 'name');
         $category_items = ArrayHelper::merge($shop_null, $category_items);
+
         //надо считать на начало дня за предыдущие дни наверное ??? что бы изменения отобразить
+
+        $result = [];
+
         $category_outlay = []; //категории которые мы расходуем в магазине
         $enrollment = []; //приход на счет
         $outlay = []; //расход со счета
@@ -120,6 +124,9 @@ class SiteController extends Controller
             $session['name'] = $post['name'];
             $session['report_category_id'] = $post['report_category_id'];
             $session['report_data'] = $post['report_data'];
+
+            $result['category_outlay'] = [];
+
             //'enrollment' => 'приход',
             //'outlay' => 'расход'
             $where_sum_enrollment = [
@@ -170,20 +177,15 @@ class SiteController extends Controller
             $sum_outlay = ShopStatistics::find()->select(['shop_id', 'type_case', 'SUM(`case`) as cost',])->where(
                 $where_sum_outlay
             )->andwhere($andwhere)->asArray()->one();//расход
-            $statistics = ShopInfo::find()->
-            select([
-                'shop_info.name as name',
-                'shop_statistics.`case` as cost',
-                'shop_statistics.`type_case` as type',
-                'shop_statistics.`data` as data',
-                'shop_statistics.`category_id` as category',
-            ])->
-            leftJoin('shop_statistics', 'shop_info.id = shop_statistics.shop_id ' . $str_join . ' ' . $str_join2)->
-            where(['shop_info.user_id' => Yii::$app->user->identity->id])
-                ->andWhere(['shop_id' => $post['name']])
-                ->orderBy(['shop_statistics.data' => SORT_ASC])
-                ->asArray()
-                ->all();
+
+            $user_id = Yii::$app->user->identity->id;
+            $statistics = $model->getShopInfoAll($str_join, $str_join2, $post['name'],$user_id);
+            /*
+            print_r($statistics2);
+            print_r('<br><br><br>');
+            print_r($statistics);
+            print_r('<br><br><br>');
+            exit();*/
             //создать отлельно массив дат и перебирать их для баланса графика на каждую дату( !?
             foreach ($statistics as $statistic):
                 $data[$statistic['data']] = $statistic['data'];

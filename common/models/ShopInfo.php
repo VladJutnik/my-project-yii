@@ -85,4 +85,29 @@ class ShopInfo extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+
+    /**
+     * Gets query for [[User]].
+     *
+     * @return array|\yii\db\ActiveQuery|\yii\db\ActiveRecord[]
+     */
+    public function getShopInfoAll($str_join, $str_join2, $name, $user_id)
+    {
+        $statistics = ShopInfo::find()->
+        select([
+            'shop_info.name as name',
+            'shop_statistics.`case` as cost',
+            'shop_statistics.`type_case` as type',
+            'shop_statistics.`data` as data',
+            'shop_statistics.`category_id` as category',
+        ])->
+        leftJoin('shop_statistics', 'shop_info.id = shop_statistics.shop_id ' . $str_join . ' ' . $str_join2)->
+        where(['shop_info.user_id' => $user_id])
+            ->andWhere(['shop_id' => $name])
+            ->orderBy(['shop_statistics.data' => SORT_ASC])
+            ->asArray()
+            ->all();
+
+        return $statistics;
+    }
 }
