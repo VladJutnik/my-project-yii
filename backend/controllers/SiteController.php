@@ -154,38 +154,11 @@ class SiteController extends Controller
             } else {
                 $str_join2 = '';
             }
-            //Тестим запросы в БД и пишем код запросов в yii
-            //SELECT shop_id, type_case, SUM(`case`) as sum FROM `shop_statistics` WHERE shop_id = 1 and type_case = 'outlay'
-            //SELECT shop_id, type_case, SUM(`case`) as sum FROM `shop_statistics` WHERE shop_id = 1 and type_case = 'enrollment' and `data` <= '2021-10-16'
-            //SELECT
-            //    shop.name,
-            //    statistics.`case` AS `cost`,
-            //    statistics.`type_case` AS `type`,
-            //    statistics.data AS `data`,
-            //    statistics.`category_id` AS `category`
-            //FROM `shop_info`as shop
-            //LEFT JOIN `shop_statistics` as statistics ON (shop.id = statistics.`shop_id` and statistics.data <= '2021-10-17')
-            //WHERE shop.user_id = 1
-            //'enrollment' => 'приход',
-            //'outlay' => 'расход'
-            /*$sum_enrollment = ShopStatistics::find()->select(['shop_id', 'type_case', 'SUM(`case`) as cost',])->where(['shop_id' => $post['name'], 'type_case' => 'enrollment', $where_category_sum])->asArray()->one();//приход
-            $sum_outlay = ShopStatistics::find()->select(['shop_id', 'type_case', 'SUM(`case`) as cost',])->where(['shop_id' => $post['name'], 'type_case' => 'outlay', $where_category_sum])->asArray()->one();//расход
-            */
-            $sum_enrollment = ShopStatistics::find()->select(['shop_id', 'type_case', 'SUM(`case`) as cost',])->where(
-                $where_sum_enrollment
-            )->andwhere($andwhere)->asArray()->one();//приход
-            $sum_outlay = ShopStatistics::find()->select(['shop_id', 'type_case', 'SUM(`case`) as cost',])->where(
-                $where_sum_outlay
-            )->andwhere($andwhere)->asArray()->one();//расход
 
-            $user_id = Yii::$app->user->identity->id;
-            $statistics = $model->getShopInfoAll($str_join, $str_join2, $post['name'],$user_id);
-            /*
-            print_r($statistics2);
-            print_r('<br><br><br>');
-            print_r($statistics);
-            print_r('<br><br><br>');
-            exit();*/
+            $sum_enrollment = $model->getShopEnrollmen($where_sum_enrollment, $andwhere);//приход
+            $sum_outlay = $model->getShopOutlay($where_sum_outlay, $andwhere);//расход
+            $statistics = $model->getShopInfoAll($str_join, $str_join2, $post['name'], Yii::$app->user->identity->id);
+
             //создать отлельно массив дат и перебирать их для баланса графика на каждую дату( !?
             foreach ($statistics as $statistic):
                 $data[$statistic['data']] = $statistic['data'];
@@ -281,6 +254,7 @@ class SiteController extends Controller
             $session['name'] = $post['name'];
             $session['report_category_id'] = $post['report_category_id'];
             $session['report_data'] = $post['report_data'];
+
             $shop = ShopInfo::find()->where(['user_id' => $post['user_id'], 'status_view' => '0'])->all();
             $shop_items = ArrayHelper::map($shop, 'id', 'name');
             $where_sum_enrollment = [
@@ -307,26 +281,11 @@ class SiteController extends Controller
             } else {
                 $str_join2 = '';
             }
-            $sum_enrollment = ShopStatistics::find()->select(['shop_id', 'type_case', 'SUM(`case`) as cost',])->where(
-                $where_sum_enrollment
-            )->andwhere($andwhere)->asArray()->one();//приход
-            $sum_outlay = ShopStatistics::find()->select(['shop_id', 'type_case', 'SUM(`case`) as cost',])->where(
-                $where_sum_outlay
-            )->andwhere($andwhere)->asArray()->one();//расход
-            $statistics = ShopInfo::find()->
-            select([
-                'shop_info.name as name',
-                'shop_statistics.`case` as cost',
-                'shop_statistics.`type_case` as type',
-                'shop_statistics.`data` as data',
-                'shop_statistics.`category_id` as category',
-            ])->
-            leftJoin('shop_statistics', 'shop_info.id = shop_statistics.shop_id ' . $str_join . ' ' . $str_join2)->
-            where(['shop_info.user_id' => $post['user_id']])
-                ->andWhere(['shop_id' => $post['name']])
-                ->orderBy(['shop_statistics.data' => SORT_ASC])
-                ->asArray()
-                ->all();
+
+            $sum_enrollment = $model->getShopEnrollmen($where_sum_enrollment, $andwhere);//приход
+            $sum_outlay = $model->getShopOutlay($where_sum_outlay, $andwhere);//расход
+            $statistics = $model->getShopInfoAll($str_join, $str_join2, $post['name'], $post['user_id']);
+
             //создать отлельно массив дат и перебирать их для баланса графика на каждую дату( !?
             foreach ($statistics as $statistic):
                 $data[$statistic['data']] = $statistic['data'];

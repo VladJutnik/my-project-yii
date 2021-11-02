@@ -93,6 +93,24 @@ class ShopInfo extends \yii\db\ActiveRecord
      */
     public function getShopInfoAll($str_join, $str_join2, $name, $user_id)
     {
+        //Тестим запросы в БД и пишем код запросов в yii
+        //SELECT shop_id, type_case, SUM(`case`) as sum FROM `shop_statistics` WHERE shop_id = 1 and type_case = 'outlay'
+        //SELECT shop_id, type_case, SUM(`case`) as sum FROM `shop_statistics` WHERE shop_id = 1 and type_case = 'enrollment' and `data` <= '2021-10-16'
+        //SELECT
+        //    shop.name,
+        //    statistics.`case` AS `cost`,
+        //    statistics.`type_case` AS `type`,
+        //    statistics.data AS `data`,
+        //    statistics.`category_id` AS `category`
+        //FROM `shop_info`as shop
+        //LEFT JOIN `shop_statistics` as statistics ON (shop.id = statistics.`shop_id` and statistics.data <= '2021-10-17')
+        //WHERE shop.user_id = 1
+        //'enrollment' => 'приход',
+        //'outlay' => 'расход'
+        /*$sum_enrollment = ShopStatistics::find()->select(['shop_id', 'type_case', 'SUM(`case`) as cost',])->where(['shop_id' => $post['name'], 'type_case' => 'enrollment', $where_category_sum])->asArray()->one();//приход
+        $sum_outlay = ShopStatistics::find()->select(['shop_id', 'type_case', 'SUM(`case`) as cost',])->where(['shop_id' => $post['name'], 'type_case' => 'outlay', $where_category_sum])->asArray()->one();//расход
+        */
+
         $statistics = ShopInfo::find()->
         select([
             'shop_info.name as name',
@@ -109,5 +127,33 @@ class ShopInfo extends \yii\db\ActiveRecord
             ->all();
 
         return $statistics;
+    }
+
+    /**
+     * Gets query for [[User]].
+     *
+     * @return array|\yii\db\ActiveQuery|\yii\db\ActiveRecord[]
+     */
+    public function getShopEnrollmen($where_sum_enrollment, $andwhere)
+    {
+        $sum_enrollment = ShopStatistics::find()->select(['shop_id', 'type_case', 'SUM(`case`) as cost',])->where(
+            $where_sum_enrollment
+        )->andwhere($andwhere)->asArray()->one();//приход
+
+        return $sum_enrollment;
+    }
+
+    /**
+     * Gets query for [[User]].
+     *
+     * @return array|\yii\db\ActiveQuery|\yii\db\ActiveRecord[]
+     */
+    public function getShopOutlay($where_sum_outlay, $andwhere)
+    {
+        $sum_outlay = ShopStatistics::find()->select(['shop_id', 'type_case', 'SUM(`case`) as cost',])->where(
+            $where_sum_outlay
+        )->andwhere($andwhere)->asArray()->one();//расход
+
+        return $sum_outlay;
     }
 }

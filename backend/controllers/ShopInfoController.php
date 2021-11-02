@@ -132,37 +132,14 @@ class ShopInfoController extends Controller
             'type_case' => 'outlay'
         ];
         $shop = ShopInfo::findOne($id);
-        $sum_enrollment = ShopStatistics::find()->select(['shop_id', 'type_case', 'SUM(`case`) as cost',])->where(
-            $where_sum_enrollment
-        )->asArray()->one();//приход
-        $sum_outlay = ShopStatistics::find()->select(['shop_id', 'type_case', 'SUM(`case`) as cost',])->where(
-            $where_sum_outlay
-        )->asArray()->one();//расход
-        $statistics = ShopInfo::find()->
-        select([
-            'shop_info.name as name',
-            'shop_statistics.`case` as cost',
-            'shop_statistics.`type_case` as type',
-            'shop_statistics.`data` as data',
-            'category.`name` as category_name',
-        ])->
-        leftJoin('shop_statistics', 'shop_info.id = shop_statistics.shop_id')->
-        leftJoin('category', 'category.id = shop_statistics.category_id')->
-        where(['shop_info.user_id' => Yii::$app->user->identity->id])
-            ->andWhere(['shop_id' => $id])
-            ->orderBy(['shop_statistics.data' => SORT_ASC])
-            ->asArray()
-            ->all();
-        //SELECT
-        //shop . name,
-        //statistics . `case` as `cost`,
-        //statistics . `type_case` as `type`,
-        //statistics . data as `data`,
-        //category . `name` as `category`
-        //FROM `shop_info`as shop
-        //LEFT JOIN `shop_statistics` as statistics ON(shop . id = statistics . `shop_id`)
-        //LEFT JOIN `category` as category ON(category . id = statistics . `category_id`)
-        //WHERE shop . user_id = 1
+
+        $andwhere = [];
+        $str_join = '';
+        $str_join2 = '';
+
+        $sum_enrollment = $shop->getShopEnrollmen($where_sum_enrollment, $andwhere);//приход
+        $sum_outlay = $shop->getShopOutlay($where_sum_outlay, $andwhere);//расход
+        $statistics = $shop->getShopInfoAll($str_join, $str_join2, $id, Yii::$app->user->identity->id);
 
         $category_outlay = []; //категории которые мы расходуем в магазине
         $enrollment = []; //приход на счет
